@@ -11,7 +11,7 @@ import 'dotenv/config.js'
 // 資料庫使用
 import { QueryTypes } from 'sequelize'
 import sequelize from '#configs/db.js'
-const { User } = sequelize.models
+const { Member } = sequelize.models
 
 // 驗証加密密碼字串用
 import { compareHash } from '#db-helpers/password-hash.js'
@@ -22,7 +22,7 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
 // 檢查登入狀態用
 router.get('/check', authenticate, async (req, res) => {
   // 查詢資料庫目前的資料
-  const user = await User.findByPk(req.user.id, {
+  const user = await Member.findByPk(req.user.id, {
     raw: true, // 只需要資料表中資料
   })
 
@@ -31,12 +31,12 @@ router.get('/check', authenticate, async (req, res) => {
   return res.json({ status: 'success', data: { user } })
 })
 
-router.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
   // 從前端來的資料 req.body = { username:'xxxx', password :'xxxx'}
   const loginUser = req.body
 
   // 檢查從前端來的資料哪些為必要
-  if (!loginUser.username || !loginUser.password) {
+  if (!loginUser.email || !loginUser.password) {
     return res.json({ status: 'fail', data: null })
   }
 
@@ -54,9 +54,9 @@ router.post('/login', async (req, res) => {
   // )
 
   // 方式二: 使用模型查詢
-  const user = await User.findOne({
+  const user = await Member.findOne({
     where: {
-      username: loginUser.username,
+      email: loginUser.email,
     },
     raw: true, // 只需要資料表中資料
   })
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
   // 存取令牌(access token)只需要id和username就足夠，其它資料可以再向資料庫查詢
   const returnUser = {
     id: user.id,
-    username: user.username,
+    email: user.email,
     google_uid: user.google_uid,
     line_uid: user.line_uid,
   }
