@@ -78,12 +78,7 @@ router.post('/', async function (req, res) {
   const newUser = req.body
 
   // 檢查從前端來的資料哪些為必要(name, username...)
-  if (
-    !newUser.username ||
-    !newUser.email ||
-    !newUser.name ||
-    !newUser.password
-  ) {
+  if (!newUser.name || !newUser.email || !newUser.password) {
     return res.json({ status: 'error', message: '缺少必要資料' })
   }
 
@@ -92,13 +87,12 @@ router.post('/', async function (req, res) {
   // defaults用於建立新資料用需要的資料
   const [user, created] = await Member.findOrCreate({
     where: {
-      [Op.or]: [{ username: newUser.username }, { email: newUser.email }],
+      [Op.or]: [{ username: newUser.name }, { email: newUser.email }],
     },
     defaults: {
       name: newUser.name,
-      password: newUser.password,
-      username: newUser.username,
       email: newUser.email,
+      password: newUser.password,
     },
   })
 
