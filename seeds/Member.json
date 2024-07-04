@@ -8,7 +8,10 @@
     "mobile": "0942135630",
     "birthday": "1986-11-01",
     "address": "706 白沙市公園巷5號之8",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
+
   },
   {
     "id": null,
@@ -19,7 +22,9 @@
     "mobile": "0951907593",
     "birthday": "1973-07-29",
     "address": "811 基隆迴龍巷85號之5",
-    "photo": "https://placeimg.com/238/1018/any"
+    "photo": "https://placeimg.com/238/1018/any",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -30,7 +35,9 @@
     "mobile": "0915490413",
     "birthday": "1958-08-07",
     "address": "237 新營興街5段38號4樓",
-    "photo": "https://dummyimage.com/742x322"
+    "photo": "https://dummyimage.com/742x322",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -41,7 +48,9 @@
     "mobile": "0938104979",
     "birthday": "1955-09-15",
     "address": "479 台東光明街5號9樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -52,7 +61,9 @@
     "mobile": "0939514218",
     "birthday": "1962-08-30",
     "address": "70459 卑南市大橋頭巷2號之2",
-    "photo": "https://placekitten.com/255/375"
+    "photo": "https://placekitten.com/255/375",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -63,7 +74,9 @@
     "mobile": "0961246814",
     "birthday": "2001-12-26",
     "address": "371 連江市象山街73號7樓",
-    "photo": "https://placeimg.com/111/840/any"
+    "photo": "https://placeimg.com/111/840/any",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -74,7 +87,9 @@
     "mobile": "0947524119",
     "birthday": "1975-01-21",
     "address": "125 員林市民有路29號6樓",
-    "photo": "https://placekitten.com/736/538"
+    "photo": "https://placekitten.com/736/538",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -85,7 +100,9 @@
     "mobile": "0938387564",
     "birthday": "2003-07-23",
     "address": "307 大里忠孝路4段65號2樓",
-    "photo": "https://dummyimage.com/594x808"
+    "photo": "https://dummyimage.com/594x808",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -96,7 +113,9 @@
     "mobile": "0983842052",
     "birthday": "1988-12-03",
     "address": "33811 鳳山瑞光路83號5樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -107,7 +126,9 @@
     "mobile": "0954420226",
     "birthday": "1992-09-05",
     "address": "67884 八德民族路4號3樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -118,7 +139,9 @@
     "mobile": "0978162819",
     "birthday": "1968-09-27",
     "address": "91579 台北縣水源巷1段468號之9",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -129,7 +152,9 @@
     "mobile": "0935513777",
     "birthday": "1935-05-27",
     "address": "633 苗栗中和巷1段9號之1",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -140,7 +165,9 @@
     "mobile": "0928030856",
     "birthday": "1965-07-17",
     "address": "961 北港縣關渡路37號5樓",
-    "photo": "https://dummyimage.com/632x383"
+    "photo": "https://dummyimage.com/632x383",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -151,7 +178,9 @@
     "mobile": "0995872335",
     "birthday": "1992-06-04",
     "address": "60515 南投勝利街1段1號1樓",
-    "photo": "https://placeimg.com/848/573/any"
+    "photo": "https://placeimg.com/848/573/any",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -162,7 +191,9 @@
     "mobile": "0946350961",
     "birthday": "1971-08-12",
     "address": "37403 板橋松山街950號8樓",
-    "photo": "https://placekitten.com/506/288"
+    "photo": "https://placekitten.com/506/288",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -173,7 +204,9 @@
     "mobile": "0973652139",
     "birthday": "1959-02-25",
     "address": "35720 羅東福德路84號",
-    "photo": "https://dummyimage.com/226x855"
+    "photo": "https://dummyimage.com/226x855",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -184,7 +217,9 @@
     "mobile": "0953967821",
     "birthday": "1965-06-17",
     "address": "11612 潮州光復巷5段97號6樓",
-    "photo": "https://dummyimage.com/595x660"
+    "photo": "https://dummyimage.com/595x660",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -195,7 +230,9 @@
     "mobile": "0927993880",
     "birthday": "1995-03-11",
     "address": "222 永康水源巷6段77號之1",
-    "photo": "https://placeimg.com/283/874/any"
+    "photo": "https://placeimg.com/283/874/any",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -206,7 +243,9 @@
     "mobile": "0912348614",
     "birthday": "1958-05-21",
     "address": "68946 三重市中華街6號2樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -217,7 +256,9 @@
     "mobile": "0921894582",
     "birthday": "1948-03-30",
     "address": "58985 桃園文化街5號5樓",
-    "photo": "https://placekitten.com/684/666"
+    "photo": "https://placekitten.com/684/666",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -228,7 +269,9 @@
     "mobile": "0912154794",
     "birthday": "1969-10-22",
     "address": "158 宜蘭市建國巷4段28號1樓",
-    "photo": "https://placekitten.com/266/570"
+    "photo": "https://placekitten.com/266/570",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -239,7 +282,9 @@
     "mobile": "0934851244",
     "birthday": "2005-08-09",
     "address": "19011 平鎮迴龍街206號之4",
-    "photo": "https://placeimg.com/155/587/any"
+    "photo": "https://placeimg.com/155/587/any",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -250,7 +295,9 @@
     "mobile": "0925436114",
     "birthday": "1955-05-10",
     "address": "316 板橋福德街4段95號2樓",
-    "photo": "https://dummyimage.com/651x960"
+    "photo": "https://dummyimage.com/651x960",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -261,7 +308,9 @@
     "mobile": "0913210987",
     "birthday": "1964-08-05",
     "address": "799 台中中山街9段61號之2",
-    "photo": "https://dummyimage.com/938x419"
+    "photo": "https://dummyimage.com/938x419",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -272,7 +321,9 @@
     "mobile": "0946982135",
     "birthday": "2000-09-10",
     "address": "69451 新莊瑞光巷8段86號之3",
-    "photo": "https://dummyimage.com/452x952"
+    "photo": "https://dummyimage.com/452x952",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -283,7 +334,9 @@
     "mobile": "0954638112",
     "birthday": "1970-04-21",
     "address": "547 安平光明巷7號之1",
-    "photo": "https://dummyimage.com/375x892"
+    "photo": "https://dummyimage.com/375x892",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -294,7 +347,9 @@
     "mobile": "0976258143",
     "birthday": "2001-11-09",
     "address": "800 高雄市和平路5段92號3樓",
-    "photo": "https://dummyimage.com/899x735"
+    "photo": "https://dummyimage.com/899x735",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -305,7 +360,9 @@
     "mobile": "0984165172",
     "birthday": "1959-02-24",
     "address": "762 新竹市中正路9段7號之7",
-    "photo": "https://placekitten.com/200/500"
+    "photo": "https://placekitten.com/200/500",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -316,7 +373,9 @@
     "mobile": "0968741253",
     "birthday": "1988-11-05",
     "address": "984 台南市中正路2號5樓",
-    "photo": "https://dummyimage.com/123x567"
+    "photo": "https://dummyimage.com/123x567",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -327,7 +386,9 @@
     "mobile": "0971845632",
     "birthday": "2002-02-21",
     "address": "482 安平市仁愛路3段6號8樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -338,7 +399,9 @@
     "mobile": "0927394168",
     "birthday": "1998-07-19",
     "address": "65714 三重市中山路4段1號之3",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -349,7 +412,9 @@
     "mobile": "0956934721",
     "birthday": "1980-10-01",
     "address": "188 三重市瑞光街2段9號之4",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -360,7 +425,9 @@
     "mobile": "0915412378",
     "birthday": "1974-08-11",
     "address": "65812 高雄市中山路3段87號2樓",
-    "photo": "https://placekitten.com/800/600"
+    "photo": "https://placekitten.com/800/600",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -371,7 +438,9 @@
     "mobile": "0957361245",
     "birthday": "1991-01-07",
     "address": "415 桃園縣三民路1段10號7樓",
-    "photo": "https://dummyimage.com/333x789"
+    "photo": "https://dummyimage.com/333x789",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -382,7 +451,9 @@
     "mobile": "0925410879",
     "birthday": "1966-03-19",
     "address": "934 桃園縣和平巷7段62號5樓",
-    "photo": "https://dummyimage.com/852x114"
+    "photo": "https://dummyimage.com/852x114",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -393,7 +464,9 @@
     "mobile": "0936985472",
     "birthday": "2004-11-13",
     "address": "212 新竹市中山路5段95號2樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -404,7 +477,9 @@
     "mobile": "0943658709",
     "birthday": "1958-04-10",
     "address": "945 嘉義市和平路3段7號6樓",
-    "photo": "https://placeimg.com/153/705/any"
+    "photo": "https://placeimg.com/153/705/any",
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -415,7 +490,9 @@
     "mobile": "0921436987",
     "birthday": "1995-12-12",
     "address": "704 台中市文化街5段12號8樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   },
   {
     "id": null,
@@ -426,6 +503,47 @@
     "mobile": "0974658231",
     "birthday": "1951-07-29",
     "address": "816 高雄市中華路2段78號5樓",
-    "photo": null
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
+  },
+  {
+    "id": null,
+    "name": "隨意",
+    "email": "castle@gg.com",
+    "password": "19970725",
+    "gender": "female",
+    "mobile": "0974338231",
+    "birthday": "2010-06-29",
+    "address": "816 高雄市中華路2段78號5樓",
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
+  },
+  {
+    "id": null,
+    "name": "Ming",
+    "email": "ming@gg.com",
+    "password": "123456",
+    "gender": "male",
+    "mobile": "0974337231",
+    "birthday": "2010-07-23",
+    "address": "816 高雄市中華路2段78號5樓",
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
+  },
+  {
+    "id": null,
+    "name": "Jin",
+    "email": "jin@test.com",
+    "password": "123456",
+    "gender": "male",
+    "mobile": "0974337211",
+    "birthday": "2010-05-20",
+    "address": "816 高雄市中華路2段78號5樓",
+    "photo": null,
+    "google_uid":null,
+    "photo_url":null
   }
 ]
