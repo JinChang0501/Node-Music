@@ -10,7 +10,7 @@ import { getIdParam } from '#db-helpers/db-tool.js'
 // 資料庫使用
 import { Op } from 'sequelize'
 import sequelize from '#configs/db.js'
-const { User } = sequelize.models
+const { Member } = sequelize.models
 
 // 驗証加密密碼字串用
 import { compareHash } from '#db-helpers/password-hash.js'
@@ -37,7 +37,7 @@ const upload = multer({ storage: storage })
 
 // GET - 得到所有會員資料
 router.get('/', async function (req, res) {
-  const users = await User.findAll({ logging: console.log })
+  const users = await Member.findAll({ logging: console.log })
   // 處理如果沒找到資料
 
   // 標準回傳JSON
@@ -54,7 +54,7 @@ router.get('/:id', authenticate, async function (req, res) {
     return res.json({ status: 'error', message: '存取會員資料失敗' })
   }
 
-  const user = await User.findByPk(id, {
+  const user = await Member.findByPk(id, {
     raw: true, // 只需要資料表中資料
   })
 
@@ -90,7 +90,7 @@ router.post('/', async function (req, res) {
   // 執行後user是建立的會員資料，created為布林值
   // where指的是不可以有相同的資料，如username或是email不能有相同的
   // defaults用於建立新資料用需要的資料
-  const [user, created] = await User.findOrCreate({
+  const [user, created] = await Member.findOrCreate({
     where: {
       [Op.or]: [{ username: newUser.username }, { email: newUser.email }],
     },
@@ -132,7 +132,7 @@ router.post(
       const data = { avatar: req.file.filename }
 
       // 對資料庫執行update
-      const [affectedRows] = await User.update(data, {
+      const [affectedRows] = await Member.update(data, {
         where: {
           id,
         },
@@ -178,7 +178,7 @@ router.put('/:id/password', authenticate, async function (req, res) {
   }
 
   // 查詢資料庫目前的資料
-  const dbUser = await User.findByPk(id, {
+  const dbUser = await Member.findByPk(id, {
     raw: true, // 只需要資料表中資料
   })
 
@@ -197,7 +197,7 @@ router.put('/:id/password', authenticate, async function (req, res) {
   }
 
   // 對資料庫執行update
-  const [affectedRows] = await User.update(
+  const [affectedRows] = await Member.update(
     { password: userPassword.new },
     {
       where: {
@@ -234,7 +234,7 @@ router.put('/:id/profile', authenticate, async function (req, res) {
   }
 
   // 查詢資料庫目前的資料
-  const dbUser = await User.findByPk(id, {
+  const dbUser = await Member.findByPk(id, {
     raw: true, // 只需要資料表中資料
   })
 
@@ -249,7 +249,7 @@ router.put('/:id/profile', authenticate, async function (req, res) {
   }
 
   // 對資料庫執行update
-  const [affectedRows] = await User.update(user, {
+  const [affectedRows] = await Member.update(user, {
     where: {
       id,
     },
@@ -261,7 +261,7 @@ router.put('/:id/profile', authenticate, async function (req, res) {
   }
 
   // 更新成功後，找出更新的資料，updatedUser為更新後的會員資料
-  const updatedUser = await User.findByPk(id, {
+  const updatedUser = await Member.findByPk(id, {
     raw: true, // 只需要資料表中資料
   })
 
@@ -276,7 +276,7 @@ router.put('/:id/profile', authenticate, async function (req, res) {
 router.delete('/:id', async function (req, res) {
   const id = getIdParam(req)
 
-  const affectedRows = await User.destroy({
+  const affectedRows = await Member.destroy({
     where: {
       id,
     },
