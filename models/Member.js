@@ -31,7 +31,7 @@ export default async function (sequelize) {
         allowNull: true,
       },
       birthday: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true,
       },
       address: {
