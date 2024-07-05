@@ -4,7 +4,7 @@ export default async function (sequelize) {
   return sequelize.define(
     'Activity',
     {
-      id: {
+      actid: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -17,13 +17,8 @@ export default async function (sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      a_date: {
+      a_datetime: {
         type: DataTypes.DATE,
-        allowNull: false,
-      },
-      // 跟銘討論日期跟時間是否需合併
-      a_time: {
-        type: DataTypes.TIME,
         allowNull: false,
       },
       location: {
