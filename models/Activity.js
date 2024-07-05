@@ -54,6 +54,10 @@ export default async function (sequelize) {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      cover: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       tableName: 'activity', //直接提供資料表名稱
