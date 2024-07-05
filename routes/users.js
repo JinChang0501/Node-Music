@@ -211,7 +211,7 @@ router.put('/:id/password', authenticate, async function (req, res) {
 })
 
 // PUT - 更新會員資料(排除更新密碼)
-router.put('/:id/profile', authenticate, async function (req, res) {
+router.put('/:id/account', authenticate, async function (req, res) {
   const id = getIdParam(req)
 
   // 檢查是否為授權會員，只有授權會員可以存取自己的資料
@@ -238,8 +238,8 @@ router.put('/:id/profile', authenticate, async function (req, res) {
   }
 
   // 有些特殊欄位的值沒有時要略過更新，不然會造成資料庫錯誤
-  if (!user.birth_date) {
-    delete user.birth_date
+  if (!user.birthday) {
+    delete user.birthday
   }
 
   // 對資料庫執行update
@@ -266,6 +266,7 @@ router.put('/:id/profile', authenticate, async function (req, res) {
   return res.json({ status: 'success', data: { user: updatedUser } })
 })
 
+// --------------------------------
 // DELETE - 刪除會員資料
 router.delete('/:id', async function (req, res) {
   const id = getIdParam(req)
