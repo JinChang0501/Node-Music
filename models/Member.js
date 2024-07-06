@@ -38,7 +38,7 @@ export default async function (sequelize) {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      photo: {
+      avatar: {
         type: DataTypes.STRING,
         allowNull: true,
       },
