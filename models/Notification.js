@@ -4,7 +4,7 @@ export default async function (sequelize) {
   return sequelize.define(
     'Notification',
     {
-      id: {
+      nid: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -28,6 +28,8 @@ export default async function (sequelize) {
         //   model: 'nclass',
         //   key: 'id'
         // },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL'
       },
     },
     {

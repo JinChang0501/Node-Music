@@ -14,10 +14,10 @@ export default async function (sequelize) {
       activity_class: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Aclass',
-          key: 'id'
-        },
+        // references: {
+        //   model: 'Aclass',
+        //   key: 'id'
+        // },
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE'
       },

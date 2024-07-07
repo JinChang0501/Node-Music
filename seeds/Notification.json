@@ -1,0 +1,51 @@
+[
+  {
+    "nid": null,
+    "title": "滅火器",
+    "content": "即將參加火球祭",
+    "sent_time": "2024-5-20 12:00:00",
+    "noti_class": 1
+  },
+  {
+    "nid": null,
+    "title": "Energy",
+    "content": "演唱會來襲",
+    "sent_time": "2024-5-21 18:00:00",
+    "noti_class": 1
+  },
+  {
+    "nid": null,
+    "title": "血肉果汁機",
+    "content": "2024全新巡迴演出",
+    "sent_time": "2024-5-30 12:00:00",
+    "noti_class": 1
+  },
+  {
+    "nid": null,
+    "title": "雨山祭",
+    "content": "周邊搶購",
+    "sent_time": "2024-6-20 19:00:00",
+    "noti_class": 2
+  },
+  {
+    "nid": null,
+    "title": "台秋祭",
+    "content": "遊玩攻略",
+    "sent_time": "2024-7-20 20:00:00",
+    "noti_class": 2
+  },
+  {
+    "nid": null,
+    "title": "浪人祭",
+    "content": "卡司公布",
+    "sent_time": "2024-9-21 18:00:00",
+    "noti_class": 2
+  },
+  {
+    "nid": null,
+    "title": "霓虹綠洲音樂祭",
+    "content": "最新消息發布",
+    "sent_time": "2024-9-15 12:00:00",
+    "noti_class": 2
+  }
+]

@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize'
 
-export default async function Aclass(sequelize) {
+export default async function (sequelize) {
   return sequelize.define(
     'Aclass',
     {
