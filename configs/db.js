@@ -64,7 +64,7 @@ await applyModels(sequelize)
 // { alter: true } 檢查資料庫中資料表的當前狀態(它有哪些列,它們的資料類型等),然後在表中進行必要的更改，使其與模型匹配.
 // { force: true } 將建立資料表,如果表已經存在,則將其首先刪除
 // {} 如果表不存在,則建立該表(如果已經存在,則不執行任何操作)
-await sequelize.sync({ force: true })
+await sequelize.sync({})
 
 console.log(
   'INFO - 所有模型已載入完成(如果表不存在建立該表) All models were synchronized successfully.'
