@@ -23,11 +23,11 @@ export default async function (sequelize) {
       },
       noti_class: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        // references: {
-        //   model: 'nclass',
-        //   key: 'id'
-        // },
+        allowNull: true,
+        references: {
+          model: 'nclass',
+          key: 'id'
+        },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL'
       },
