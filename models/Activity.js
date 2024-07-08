@@ -1,6 +1,8 @@
 import { DataTypes } from 'sequelize'
+// import Aclass from './Aclass.js';
 
 export default async function (sequelize) {
+  // const Aclass = sequelize.models.aclass || await import('./Aclass.js').then(m => m.default(sequelize));
   return sequelize.define(
     'Activity',
     {
@@ -12,6 +14,12 @@ export default async function (sequelize) {
       activity_class: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        // references: {
+        //   model: 'Aclass',
+        //   key: 'id'
+        // },
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE'
       },
       activity_name: {
         type: DataTypes.STRING,
@@ -27,7 +35,7 @@ export default async function (sequelize) {
       },
       area: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       address: {
         type: DataTypes.STRING,
@@ -44,6 +52,7 @@ export default async function (sequelize) {
       artist_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        // 這裡也要接 foreign key
       },
       picture: {
         type: DataTypes.STRING,
@@ -61,6 +70,10 @@ export default async function (sequelize) {
       underscored: true, // 所有自動建立欄位，使用snake_case命名
       createdAt: 'created_at', // 建立的時間戳
       updatedAt: 'updated_at', // 更新的時間戳
-    }
+    },
   )
+  // Aclass.hasMany(Activity, { foreignKey: 'activity_class' })
+  // Activity.belongsTo(Aclass, { foreignKey: 'activity_class' })
+
+  // return Activity
 }
