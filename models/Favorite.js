@@ -12,10 +12,10 @@ export default async function (sequelize) {
       member_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: 'members',
-          key: 'id'
-        },
+        // references: {
+        //   model: 'member',
+        //   key: 'id'
+        // },
         // onDelete: 'SET NULL',
         // onUpdate: 'CASCADE'
       },
@@ -34,6 +34,6 @@ export default async function (sequelize) {
       underscored: true, // 所有自動建立欄位，使用snake_case命名
       createdAt: 'created_at', // 建立的時間戳
       updatedAt: 'updated_at', // 更新的時間戳
-    },
+    }
   )
 }
