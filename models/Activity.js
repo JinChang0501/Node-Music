@@ -15,11 +15,11 @@ export default async function (sequelize) {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-          model: 'Aclass',
-          key: 'id'
+          model: 'aclass',
+          key: 'id',
         },
         onDelete: 'SET NULL',
-        onUpdate: 'CASCADE'
+        onUpdate: 'CASCADE',
       },
       activity_name: {
         type: DataTypes.STRING,
@@ -53,7 +53,7 @@ export default async function (sequelize) {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-          model: 'Artist',
+          model: 'artist',
           key: 'id'
         },
       },

@@ -13,7 +13,7 @@ export default async function (sequelize) {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Activity',
+          model: 'activity',
           key: 'actid',
         },
       },
@@ -37,7 +37,7 @@ export default async function (sequelize) {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-          model: 'Member',
+          model: 'member',
           key: 'id',
         },
       },
