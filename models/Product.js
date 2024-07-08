@@ -1,6 +1,5 @@
 import { DataTypes } from 'sequelize'
 
-
 export default async function (sequelize) {
   return sequelize.define(
     'Product',
