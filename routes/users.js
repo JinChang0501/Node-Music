@@ -211,7 +211,7 @@ router.put('/:id/password', authenticate, async function (req, res) {
 })
 
 // PUT - 更新會員資料(排除更新密碼)
-router.put('/:id/account', authenticate, async function (req, res) {
+router.put('/:id/profile', authenticate, async function (req, res) {
   const id = getIdParam(req)
 
   // 檢查是否為授權會員，只有授權會員可以存取自己的資料

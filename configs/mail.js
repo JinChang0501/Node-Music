@@ -37,4 +37,16 @@ transporter.verify((error, success) => {
   }
 })
 
+transporter
+  .sendMail({
+    from: process.env.SMTP_TO_EMAIL,
+    to: 'jinchang0501@gmail.com',
+    subject: 'SMTP測試',
+    html: 'Hi 你好',
+  })
+  .then((info) => {
+    console.log({ info })
+  })
+  .catch(console.error)
+
 export default transporter
