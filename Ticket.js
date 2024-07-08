@@ -2,60 +2,52 @@ import { DataTypes } from 'sequelize'
 
 export default async function (sequelize) {
   return sequelize.define(
-    'Activity',
+    'Ticket',
     {
-      actid: {
+      tid: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      activity_class: {
+      activities_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Activity',
+          key: 'actid',
+        },
+      },
+      seat_area: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      seat_row: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      seat_number: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      price: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      activity_name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      a_datetime: {
-        type: DataTypes.DATE,
-        allowNull: false,
-      },
-      location: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      area: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      address: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      descriptions: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      organizer: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      artist_id: {
+      members_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        references: {
+          model: 'Member',
+          key: 'id',
+        },
       },
-      picture: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      cover: {
-        type: DataTypes.STRING,
+      order_num: {
+        type: DataTypes.STRING(50),
         allowNull: true,
       },
     },
     {
-      tableName: 'activity', //直接提供資料表名稱
+      tableName: 'ticket',
       timestamps: true, // 使用時間戳
       paranoid: false, // 軟性刪除
       underscored: true, // 所有自動建立欄位，使用snake_case命名

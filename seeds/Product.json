@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "picture": "pet_postcard.jpg",
+    "activity": "寵物嘉年華",
+    "name": "明信片組",
+    "price": "150",
+    "intro": "2024寵物嘉年華-明信片組，限量發售，全套4張，每一張都可愛度破表。",
+    "stock": "1000"
+  },
+  {
+    "id": 2,
+    "picture": "pet_keyring-dog.jpg",
+    "activity": "寵物嘉年華",
+    "name": "毛毛鑰匙圈-旺旺",
+    "price": "200",
+    "intro": "2024寵物嘉年華-毛毛鑰匙圈(旺旺)，限量發售，可愛度破表。",
+    "stock": "1000"
+  },
+  {
+    "id": 3,
+    "picture": "pet_keyring-cat.jpg",
+    "activity": "寵物嘉年華",
+    "name": "毛毛鑰匙圈-喵喵",
+    "price": "200",
+    "intro": "2024寵物嘉年華-毛毛鑰匙圈(喵喵)，限量發售，可愛度破表。",
+    "stock": "1000"
+  }
+
+]
