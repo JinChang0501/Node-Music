@@ -13,7 +13,7 @@ export default async function (sequelize) {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'members',
+          model: 'member',
           key: 'id'
         },
         // onDelete: 'SET NULL',
