@@ -49,7 +49,7 @@
     "picture": "tmf_t-shirt.jpg",
     "activity": "台灣音樂祭",
     "name": "高質感T恤",
-    "price": "200",
+    "price": "590",
     "intro": "2024台灣音樂祭T恤，最新2024台灣音樂祭官方T恤，本網站限量1000件。",
     "stock": "1000"
   },
@@ -86,7 +86,151 @@
     "activity": "台灣音樂祭",
     "name": "應援手燈",
     "price": "200",
-    "intro": "2024寵物嘉年華-毛毛鑰匙圈(喵喵)，限量發售，可愛度破表。",
+    "intro": "最新2024台灣音樂祭-官方應援手燈，在音樂祭中跟隨音樂搖動手中的手燈，舞動您的身體，盡情沉浸在超High氣氛中。",
+    "stock": "1000"
+  },
+  {
+    "id": 11,
+    "picture": "tmf_curtain.jpg",
+    "activity": "台灣音樂祭",
+    "name": "門簾",
+    "price": "500",
+    "intro": "在家中布置台灣音樂祭-高質感門簾，隨時沉浸在台灣音樂祭熱情的氣氛。",
+    "stock": "1000"
+  },
+  {
+    "id": 12,
+    "picture": "tmf_bag-blue.jpg",
+    "activity": "台灣音樂祭",
+    "name": "托特袋-藍",
+    "price": "350",
+    "intro": "活動聯名限量托特袋，名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 13,
+    "picture": "tmf_bag-blue.jpg",
+    "activity": "台灣音樂祭",
+    "name": "托特袋-粉",
+    "price": "350",
+    "intro": "活動聯名限量托特袋，名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 14,
+    "picture": "tmf_bag-blue.jpg",
+    "activity": "台灣音樂祭",
+    "name": "托特袋-綠",
+    "price": "350",
+    "intro": "活動聯名限量托特袋，名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 15,
+    "picture": "sw_t-shirt.jpg",
+    "activity": "春浪",
+    "name": "T恤",
+    "price": "500",
+    "intro": "活動聯名限量T恤，名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 16,
+    "picture": "sw_mat.jpg",
+    "activity": "春浪",
+    "name": "野餐墊",
+    "price": "500",
+    "intro": "2024春浪活動限量野餐墊，可愛度破表，文青最愛，讓您優雅輕鬆享受野餐的美好時光。",
+    "stock": "1000"
+  },
+  {
+    "id": 17,
+    "picture": "sw_towel.jpg",
+    "activity": "春浪",
+    "name": "毛巾",
+    "price": "300",
+    "intro": "2024春浪活動毛巾，最新2024台灣音樂祭官方毛巾，高質感，柔軟快乾",
+    "stock": "1000"
+  },
+  {
+    "id": 18,
+    "picture": "sw_sticker.jpg",
+    "activity": "春浪",
+    "name": "貼紙",
+    "price": "100",
+    "intro": "活動聯名限量貼紙，名牌設計總監親自設計，可愛度破表！",
+    "stock": "1000"
+  },
+  {
+    "id": 19,
+    "picture": "sw_bag.jpg",
+    "activity": "春浪",
+    "name": "購物袋",
+    "price": "300",
+    "intro": "活動聯名限量購物袋，名牌設計總監親自設計，好裝耐用，美觀！",
+    "stock": "1000"
+  },
+  {
+    "id": 21,
+    "picture": "bubble_t-shirt-pink.jpg",
+    "activity": "Bubble音樂會 ",
+    "name": "T恤-粉",
+    "price": "2100",
+    "intro": "活動聯名限量T恤，本網站限量1000件。名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 22,
+    "picture": "bubble_t-shirt-white.jpg",
+    "activity": "Bubble音樂會",
+    "name": "T恤-白",
+    "price": "2100",
+    "intro": "活動聯名限量T恤，本網站限量1000件。名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 23,
+    "picture": "ellesse_hoodie.jpg",
+    "activity": "Ellesse 音樂會",
+    "name": "連帽長袖上衣",
+    "price": "3000",
+    "intro": "活動聯名限量連帽長袖上衣，本網站限量1000件。名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 24,
+    "picture": "ellesse_t-shirt.jpg",
+    "activity": "Ellesse 音樂會",
+    "name": "T恤",
+    "price": "2100",
+    "intro": "官方限量T恤，本網站限量1000件。",
+    "stock": "1000"
+  },
+  {
+    "id": 25,
+    "picture": "foundation_t-shirt.jpg",
+    "activity": "Foundation 音樂會",
+    "name": "T恤",
+    "price": "2100",
+    "intro": "官方限量T恤，本網站限量1000件。",
+    "stock": "1000"
+  },
+  {
+    "id": 26,
+    "picture": "foundation_hoodie.jpg",
+    "activity": "Foundation 音樂會",
+    "name": "連帽長袖上衣",
+    "price": "3000",
+    "intro": "活動聯名限量連帽長袖上衣，本網站限量1000件。名牌設計總監親自設計，超高回頭率！",
+    "stock": "1000"
+  },
+  {
+    "id": 27,
+    "picture": "love_t-shirt.jpg",
+    "activity": "Foundation 音樂會",
+    "name": "Love T恤",
+    "price": "2100",
+    "intro": "官方限量T恤，本網站限量1000件。",
     "stock": "1000"
   }
 ]
