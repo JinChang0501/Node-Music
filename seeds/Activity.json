@@ -16,7 +16,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "The Yussef Dayes Experience - Live in Taipei",
+    "activity_name": "The Yussef Experience Live",
     "a_datetime": "2024-07-25 20:00:00",
     "location": "Legacy Taipei",
     "area": "北部",
@@ -44,7 +44,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "aespa台北演唱會2024",
+    "activity_name": "aespa台北演唱會",
     "a_datetime": "2024-08-10 19:00:00",
     "location": "國立體育大學綜合體育館(林口體育館)",
     "area": "北部",
@@ -58,7 +58,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "2024 Energy《一觸即發》台北演唱會",
+    "activity_name": "2024 Energy 一觸即發",
     "a_datetime": "2024-07-27 19:30:00",
     "location": "台北小巨蛋",
     "area": "北部",
@@ -72,7 +72,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "Travis Japan World Tour 2024 Road to A",
+    "activity_name": "Travis Japan World Tour",
     "a_datetime": "2024-09-03 20:00:00",
     "location": "Zepp New Taipei",
     "area": "北部",
@@ -86,7 +86,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "一生到底 One Life, One Shot",
+    "activity_name": "BTOB FAN-CON",
     "a_datetime": "2024-06-28 19:30:00",
     "location": "臺北流行音樂中心",
     "area": "北部",
@@ -100,7 +100,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "The Yussef Dayes Experience - Live in Taipei",
+    "activity_name": "老闆！到底行不行？",
     "a_datetime": "2024-03-03 18:00:00",
     "location": "Legacy Taipei",
     "area": "北部",
@@ -114,7 +114,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "10CM演唱會2024台北站",
+    "activity_name": "建宮蓋廟-宇宙預言",
     "a_datetime": "2024-05-18 19:30:00",
     "location": "Zepp New Taipei",
     "area": "北部",
@@ -128,7 +128,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "aespa台北演唱會2024",
+    "activity_name": "霓虹綠洲音樂祭",
     "a_datetime": "2024-12-25 12:00:00",
     "location": "國立體育大學綜合體育館(林口體育館)",
     "area": "北部",
@@ -142,7 +142,7 @@
   {
     "actid": null,
     "activity_class": 1,
-    "activity_name": "2024 Energy《一觸即發》台北演唱會",
+    "activity_name": "雨山祭",
     "a_datetime": "2024-09-24 11:00:00",
     "location": "台北小巨蛋",
     "area": "北部",
@@ -155,8 +155,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "Travis Japan World Tour 2024 Road to A",
+    "activity_class": 2,
+    "activity_name": "大港開唱",
     "a_datetime": "2024-07-15 11:00:00",
     "location": "Zepp New Taipei",
     "area": "北部",
@@ -169,8 +169,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "一生到底 One Life, One Shot",
+    "activity_class": 2,
+    "activity_name": "火球祭",
     "a_datetime": "2024-08-31 11:00:00",
     "location": "臺北流行音樂中心",
     "area": "北部",
@@ -183,8 +183,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "The Yussef Dayes Experience - Live in Taipei",
+    "activity_class": 2,
+    "activity_name": "赤聲躁動音樂祭",
     "a_datetime": "2024-10-13 11:00:00",
     "location": "Legacy Taipei",
     "area": "北部",
@@ -197,8 +197,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "10CM演唱會2024台北站",
+    "activity_class": 2,
+    "activity_name": "台秋祭",
     "a_datetime": "2024-08-31 11:00:00",
     "location": "Zepp New Taipei",
     "area": "北部",
@@ -211,8 +211,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "aespa台北演唱會2024",
+    "activity_class": 2,
+    "activity_name": "打狗祭",
     "a_datetime": "2024-07-24 11:00:00",
     "location": "國立體育大學綜合體育館(林口體育館)",
     "area": "北部",
@@ -225,8 +225,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "2024 Energy《一觸即發》台北演唱會",
+    "activity_class": 2,
+    "activity_name": "浮現祭",
     "a_datetime": "2024-08-19 20:00:00",
     "location": "台北小巨蛋",
     "area": "北部",
@@ -239,8 +239,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "Travis Japan World Tour 2024 Road to A",
+    "activity_class": 2,
+    "activity_name": "貴人散步音樂節",
     "a_datetime": "2024-11-04 11:00:00",
     "location": "Zepp New Taipei",
     "area": "北部",
@@ -253,8 +253,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "一生到底 One Life, One Shot",
+    "activity_class": 2,
+    "activity_name": "禾火OUT",
     "a_datetime": "2024-09-14 11:00:00",
     "location": "臺北流行音樂中心",
     "area": "北部",
@@ -267,8 +267,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "The Yussef Dayes Experience - Live in Taipei",
+    "activity_class": 2,
+    "activity_name": "浪人祭",
     "a_datetime": "2024-12-10 11:00:00",
     "location": "Legacy Taipei",
     "area": "北部",
@@ -281,8 +281,8 @@
   },
   {
     "actid": null,
-    "activity_class": 1,
-    "activity_name": "The Yussef Dayes Experience - Live in Taipei",
+    "activity_class": 2,
+    "activity_name": "簡單生活節",
     "a_datetime": "2024-12-28 12:00:00",
     "location": "Legacy Taipei",
     "area": "北部",

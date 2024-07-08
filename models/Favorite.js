@@ -11,13 +11,13 @@ export default async function (sequelize) {
       },
       member_id: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
-          model: 'Member',
+          model: 'members',
           key: 'id'
         },
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE'
+        // onDelete: 'SET NULL',
+        // onUpdate: 'CASCADE'
       },
       favorite_type: {
         type: DataTypes.ENUM('Event', 'Artist', 'Product'),
