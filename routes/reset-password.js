@@ -22,7 +22,7 @@ ${otpToken}
 router.post('/otp', async (req, res, next) => {
   const { email } = req.body
 
-  if (!email) return res.json({ status: 'error', message: '缺少必要資料' })
+  if (!email) return res.json({ status: 'error', message: '尚未輸入電子信箱' })
 
   // 建立otp資料表記錄，成功回傳otp記錄物件，失敗為空物件{}
   const otp = await createOtp(email)
@@ -35,7 +35,7 @@ router.post('/otp', async (req, res, next) => {
   // 寄送email
   const mailOptions = {
     // 這裡要改寄送人名稱，email在.env檔中代入
-    from: `"support"<${process.env.SMTP_TO_EMAIL}>`,
+    from: `"MAKIN 服務中心"<${process.env.SMTP_TO_EMAIL}>`,
     to: email,
     subject: '重設密碼要求的電子郵件驗証碼',
     text: mailText(otp.token),
