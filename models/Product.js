@@ -30,6 +30,10 @@ export default async function (sequelize) {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      stock: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
     },
     {
       tableName: 'product', //直接提供資料表名稱
