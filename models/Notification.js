@@ -28,8 +28,8 @@ export default async function (sequelize) {
           model: 'nclass',
           key: 'id'
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        // onUpdate: 'CASCADE',
+        // onDelete: 'SET NULL',
       },
     },
     {
