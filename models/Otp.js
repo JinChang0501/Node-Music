@@ -2,52 +2,32 @@ import { DataTypes } from 'sequelize'
 
 export default async function (sequelize) {
   return sequelize.define(
-    'Ticket',
+    'Otp',
     {
-      tid: {
+      id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      activities_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'activity',
-          key: 'actid',
-        },
-      },
-      seat_area: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-      },
-      seat_row: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-      },
-      seat_number: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-      },
-      price: {
+      user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      members_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'member',
-          key: 'id',
-        },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
-      order_num: {
-        type: DataTypes.STRING(50),
-        allowNull: true,
+      token: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      exp_timestamp: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
       },
     },
     {
-      tableName: 'ticket',
+      tableName: 'otp', //直接提供資料表名稱
       timestamps: true, // 使用時間戳
       paranoid: false, // 軟性刪除
       underscored: true, // 所有自動建立欄位，使用snake_case命名

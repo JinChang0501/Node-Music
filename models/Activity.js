@@ -13,13 +13,13 @@ export default async function (sequelize) {
       },
       activity_class: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        // references: {
-        //   model: 'Aclass',
-        //   key: 'id'
-        // },
+        allowNull: true,
+        references: {
+          model: 'aclass',
+          key: 'id',
+        },
         onDelete: 'SET NULL',
-        onUpdate: 'CASCADE'
+        onUpdate: 'CASCADE',
       },
       activity_name: {
         type: DataTypes.STRING,
@@ -52,7 +52,10 @@ export default async function (sequelize) {
       artist_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        // 這裡也要接 foreign key
+        references: {
+          model: 'artist',
+          key: 'id'
+        },
       },
       picture: {
         type: DataTypes.STRING,

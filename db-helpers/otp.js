@@ -4,7 +4,7 @@ import { generateToken } from '#configs/otp.js'
 // 資料庫使用
 import { QueryTypes } from 'sequelize'
 import sequelize from '#configs/db.js'
-const { User, Otp } = sequelize.models
+const { Member, Otp } = sequelize.models
 
 // 判斷token是否到期, true代表到期
 // const hasExpired = (expTimestamp) => {
@@ -21,7 +21,7 @@ const shouldReset = (expTimestamp, exp, limit = 60) => {
 const createOtp = async (email, exp = 30, limit = 60) => {
   // 方式二: 使用模型查詢
   // 檢查使用者email是否存在
-  const user = await User.findOne({
+  const user = await Member.findOne({
     where: {
       email,
     },
@@ -117,7 +117,7 @@ const updatePassword = async (email, token, password) => {
   }
 
   // 修改密碼
-  await User.update(
+  await Member.update(
     { password },
     {
       where: {
