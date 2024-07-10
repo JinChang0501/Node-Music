@@ -103,8 +103,10 @@ router.get("/:actid", async (req, res) => {
     // 沒有該筆資料
     return res.json({ success: false, error: "沒有該筆資料" });
   }
-  // const m = moment(rows[0].birthday);
-  // rows[0].actdate = m.isValid() ? m.format(dateFormat) : '';
+  const m = moment(rows[0].actdate);
+  const t = moment(rows[0].acttime, 'HH:mm:ss');
+  rows[0].actdate = m.isValid() ? m.format(dateFormat) : '';
+  rows[0].acttime = t.isValid() ? t.format(timeFormat) : '';
   res.json({ success: true, data: rows[0] });
 });
 
