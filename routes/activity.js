@@ -59,7 +59,7 @@ const getListData = async (req) => {
     }
   }
 
-  const sql = `SELECT * FROM \`activity\` ${where} ORDER BY actid ASC`;
+  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` on activity.artist_id = artist.id ${where} ORDER BY actid ASC`;
   console.log(sql);
   const [rows] = await db.query(sql);
 
