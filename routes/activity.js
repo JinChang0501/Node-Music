@@ -71,7 +71,6 @@ const getListData = async (req) => {
     el.acttime = t.isValid() ? t.format(timeFormat) : null;
   });
 
-
   success = true;
   return {
     success,
@@ -91,7 +90,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//取得單項資料的 API // 先保留，點入單筆資料的話是用這個渲染嗎？
+//取得單項資料的 API // 點入單筆資料的話是用這個渲染嗎？
 router.get("/:actid", async (req, res) => {
   const actid = +req.params.actid || 0;
   if (!actid) {
