@@ -46,11 +46,11 @@ const getListData = async (req) => {
 
 router.get("/", async (req, res) => {
   try {
-    res.locals.title = "活動列表 | " + res.locals.title;
-    res.locals.pageName = "activity";
+    // res.locals.title = "活動列表 | " + res.locals.title;
+    // res.locals.pageName = "activity";
     const data = await getListData(req);
     if (data.success) {
-      res.render("activity/list", data); // 確認路徑和文件名稱正確
+      res.render("activity", data); // 確認路徑和文件名稱正確
     } else {
       res.status(500).send("Failed to get activity list.");
     }
@@ -60,7 +60,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/api", async (req, res) => {
+router.get("/check", async (req, res) => {
   try {
     const data = await getListData(req);
     res.json(data);

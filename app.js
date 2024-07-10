@@ -48,7 +48,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // fileStore的選項 session-cookie使用
-const fileStoreOptions = { logFn: function () {} }
+const fileStoreOptions = { logFn: function () { } }
 app.use(
   session({
     store: new FileStore(fileStoreOptions), // 使用檔案記錄session
@@ -90,5 +90,6 @@ app.use(function (err, req, res, next) {
   // 更改為錯誤訊息預設為JSON格式
   res.status(500).send({ error: err })
 })
+
 
 export default app
