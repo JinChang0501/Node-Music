@@ -81,7 +81,7 @@ const getListData = async (req) => {
 };
 
 
-router.get("/check", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const data = await getListData(req);
     res.json(data);
