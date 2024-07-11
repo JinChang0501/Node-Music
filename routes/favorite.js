@@ -8,13 +8,13 @@ import authenticate from '#middlewares/authenticate.js'
 import sequelize from '#configs/db.js'
 const { Favorite } = sequelize.models
 
-// 獲得某會員id的有加入到我的最愛清單中的商品id們
-// 此路由只有登入會員能使用
+// 獲得某會員id的 有加入到我的最愛清單中的商品id們
+// 此路由只有登入會員能使用 authenticate
 router.get('/', authenticate, async (req, res) => {
   const pids = await Favorite.findAll({
     attributes: ['pid'],
     where: {
-      uid: req.user.id,
+      uid: req.member.id,
     },
     raw: true, //只需要資料
   })
@@ -27,7 +27,7 @@ router.get('/', authenticate, async (req, res) => {
 
 router.put('/:id', authenticate, async (req, res, next) => {
   const pid = getIdParam(req)
-  const uid = req.user.id
+  const uid = req.member.id
 
   const existFav = await Favorite.findOne({ where: { pid, uid } })
   if (existFav) {
