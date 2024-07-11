@@ -59,7 +59,7 @@ const getListData = async (req) => {
     }
   }
 
-  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` on activity.artist_id = artist.id ${where} ORDER BY actid ASC`;
+  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` ON activity.artist_id = artist.id ${where} ORDER BY actid ASC`;
   console.log(sql);
   const [rows] = await db.query(sql);
 
@@ -96,7 +96,7 @@ router.get("/:actid", async (req, res) => {
   if (!actid) {
     return res.json({ success: false, error: "沒有編號" });
   }
-  const t_sql = `SELECT * FROM activity WHERE actid=${actid}`;
+  const t_sql = `SELECT * FROM activity JOIN artist ON activity.artist_id = artist.id WHERE actid=${actid}`;
   const [rows] = await db.query(t_sql);
   if (!rows.length) {
     // 沒有該筆資料
