@@ -109,20 +109,4 @@ router.get("/:actid", async (req, res) => {
   res.json({ success: true, data: rows[0] });
 });
 
-// router.get("/", async (req, res) => {
-//   try {
-//     // res.locals.title = "活動列表 | " + res.locals.title;
-//     // res.locals.pageName = "activity";
-//     const data = await getListData(req);
-//     if (data.success) {
-//       res.render("activity", data); // 確認路徑和文件名稱正確
-//     } else {
-//       res.status(500).send("Failed to get activity list.");
-//     }
-//   } catch (error) {
-//     console.error("Error in / route:", error);
-//     res.status(505).send("Internal Server Error");
-//   }
-// });
-
 export default router;
