@@ -2,14 +2,6 @@ import express from "express"
 import moment from "moment-timezone"
 import db from "./../utils/connect-mysql.js"
 
-// 要做的：
-
-// 活動列表：渲染資料、搜尋、篩選 
-// 活動列表：收藏
-
-// 活動細節頁：渲染資料、收藏
-// 活動細節頁：藝人追蹤（類似收藏)
-
 const router = express.Router()
 const dateFormat = "YYYY-MM-DD"
 const timeFormat = "HH:mm"
@@ -92,7 +84,7 @@ router.get("/", async (req, res) => {
 
 //取得單項資料的 API // 點入單筆資料的話是用這個渲染嗎？
 router.get("/:actid", async (req, res) => {
-  const actid = +req.params.actid || 0
+  const actid = +req.params.actid || 0 // 轉換為數字
   if (!actid) {
     return res.json({ success: false, error: "沒有編號" })
   }
