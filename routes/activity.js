@@ -59,7 +59,7 @@ const getListData = async (req) => {
     }
   }
 
-  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` on activity.artist_id = artist.id ${where} ORDER BY actid ASC`;
+  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` ON activity.artist_id = artist.id ${where} ORDER BY actid ASC`;
   console.log(sql);
   const [rows] = await db.query(sql);
 
@@ -96,7 +96,7 @@ router.get("/:actid", async (req, res) => {
   if (!actid) {
     return res.json({ success: false, error: "沒有編號" });
   }
-  const t_sql = `SELECT * FROM activity WHERE actid=${actid}`;
+  const t_sql = `SELECT * FROM activity JOIN artist ON activity.artist_id = artist.id WHERE actid=${actid}`;
   const [rows] = await db.query(t_sql);
   if (!rows.length) {
     // 沒有該筆資料
@@ -108,21 +108,5 @@ router.get("/:actid", async (req, res) => {
   rows[0].acttime = t.isValid() ? t.format(timeFormat) : '';
   res.json({ success: true, data: rows[0] });
 });
-
-// router.get("/", async (req, res) => {
-//   try {
-//     // res.locals.title = "活動列表 | " + res.locals.title;
-//     // res.locals.pageName = "activity";
-//     const data = await getListData(req);
-//     if (data.success) {
-//       res.render("activity", data); // 確認路徑和文件名稱正確
-//     } else {
-//       res.status(500).send("Failed to get activity list.");
-//     }
-//   } catch (error) {
-//     console.error("Error in / route:", error);
-//     res.status(505).send("Internal Server Error");
-//   }
-// });
 
 export default router;
