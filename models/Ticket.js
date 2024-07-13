@@ -9,7 +9,7 @@ export default async function (sequelize) {
         primaryKey: true,
         autoIncrement: true,
       },
-      activities_id: {
+      activity_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -33,7 +33,7 @@ export default async function (sequelize) {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      members_id: {
+      member_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
@@ -52,7 +52,7 @@ export default async function (sequelize) {
       paranoid: false, // 軟性刪除
       underscored: true, // 所有自動建立欄位，使用snake_case命名
       createdAt: 'created_at', // 建立的時間戳
-      updatedAt: 'updated_at', // 更新的時間戳
+      //updatedAt: 'updated_at', // 更新的時間戳
     }
   )
 }
