@@ -10,6 +10,7 @@ const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET
 export default function authenticate(req, res, next) {
   // const token = req.headers['authorization']
   const token = req.cookies.accessToken
+
   // console.log(token)
 
   // if no token
