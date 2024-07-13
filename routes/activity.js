@@ -20,10 +20,10 @@ const getListData = async (req) => {
 
   let where = " WHERE 1 "
   if (keyword) {
-    // where += ` AND \`name\` LIKE '%${keyword}%' ` // 沒有處理 SQL injection
+    // where += ` AND \`actname\` LIKE '%${keyword}%' ` // 沒有處理 SQL injection
     const keyword_ = db.escape(`%${keyword}%`)
     console.log(keyword_)
-    where += ` AND (\`name\` LIKE ${keyword_} OR \`location\` LIKE ${keyword_} OR \`descriptions\` LIKE ${keyword_} OR \`art_name\` LIKE ${keyword_})` // 處理 SQL injection
+    where += ` AND (\`actname\` LIKE ${keyword_} OR \`location\` LIKE ${keyword_} OR \`descriptions\` LIKE ${keyword_} OR \`art_name\` LIKE ${keyword_})` // 處理 SQL injection
   }
 
 
