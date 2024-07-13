@@ -11,18 +11,44 @@ const getListData = async (req) => {
   // let redirect = ""
 
   let keyword = req.query.keyword || ""
+  let actClass = req.query.actClass || ""
+  let area = req.query.area || ""
   let date_begin = req.query.date_begin || ""
   let date_end = req.query.date_end || ""
-  let time_begin = req.query.time_begin || ""
-  let time_end = req.query.time_end || ""
+  // let time_begin = req.query.time_begin || ""
+  // let time_end = req.query.time_end || ""
 
   let where = " WHERE 1 "
   if (keyword) {
     // where += ` AND \`name\` LIKE '%${keyword}%' ` // 沒有處理 SQL injection
     const keyword_ = db.escape(`%${keyword}%`)
     console.log(keyword_)
-    where += ` AND (\`name\` LIKE ${keyword_} OR \`location\` LIKE ${keyword_}OR \`descriptions\` LIKE ${keyword_})` // 處理 SQL injection
+    where += ` AND (\`name\` LIKE ${keyword_} OR \`location\` LIKE ${keyword_} OR \`descriptions\` LIKE ${keyword_} OR \`art_name\` LIKE ${keyword_})` // 處理 SQL injection
   }
+
+
+  if(actClass) {
+    if(actClass === "1"){
+      where += ` AND \`class\` = "concert" `
+    } else if (actClass === "2") {
+      where += ` AND \`class\` = "festival" `
+    } else {
+      // 全部，就不篩
+    }
+  }
+
+  if(area) {
+    if(area === "1"){
+      where += ` AND \`area\` = "北部" `
+    } else if (area === "2") {
+      where += ` AND \`area\` = "中部" `
+    } else if (area === "3") {
+      where += ` AND \`area\` = "南部" `
+    } else {
+      // 全部，就不篩
+    }
+  }
+
   if (date_begin) {
     const m = moment(date_begin)
     if (m.isValid()) {
@@ -33,25 +59,25 @@ const getListData = async (req) => {
   if (date_end) {
     const m = moment(date_end)
     if (m.isValid()) {
-      where += ` AND actdate >= '${m.format(dateFormat)}' `
+      where += ` AND actdate <= '${m.format(dateFormat)}' `
     }
   }
 
-  if (time_begin) {
-    const t = moment(time_begin)
-    if (t.isValid()) {
-      where += ` AND acttime >= '${t.format(timeFormat)}' `
-    }
-  }
+  // if (time_begin) {
+  //   const t = moment(time_begin)
+  //   if (t.isValid()) {
+  //     where += ` AND acttime >= '${t.format(timeFormat)}' `
+  //   }
+  // }
 
-  if (time_end) {
-    const t = moment(time_end)
-    if (t.isValid()) {
-      where += ` AND acttime >= '${t.format(timeFormat)}' `
-    }
-  }
+  // if (time_end) {
+  //   const t = moment(time_end)
+  //   if (t.isValid()) {
+  //     where += ` AND acttime >= '${t.format(timeFormat)}' `
+  //   }
+  // }
 
-  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` ON activity.artist_id = artist.id ${where} ORDER BY actid ASC`
+  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` ON activity.artist_id = artist.id ${where} ORDER BY actdate ASC`
   console.log(sql)
   const [rows] = await db.query(sql)
 
@@ -59,8 +85,8 @@ const getListData = async (req) => {
     const m = moment(el.actdate)
     const t = moment(el.acttime, 'HH:mm:ss')
     // 無效的日期格式，使用空字串
-    el.actdate = m.isValid() ? m.format(dateFormat) : null
-    el.acttime = t.isValid() ? t.format(timeFormat) : null
+    el.actdate = m.isValid() ? m.format(dateFormat) : ""
+    el.acttime = t.isValid() ? t.format(timeFormat) : ""
   })
 
   success = true
