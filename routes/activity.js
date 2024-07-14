@@ -63,21 +63,16 @@ const getListData = async (req) => {
     }
   }
 
-  // if (time_begin) {
-  //   const t = moment(time_begin)
-  //   if (t.isValid()) {
-  //     where += ` AND acttime >= '${t.format(timeFormat)}' `
-  //   }
-  // }
-
-  // if (time_end) {
-  //   const t = moment(time_end)
-  //   if (t.isValid()) {
-  //     where += ` AND acttime >= '${t.format(timeFormat)}' `
-  //   }
-  // }
-
-  const sql = `SELECT * FROM \`activity\` JOIN \`artist\` ON activity.artist_id = artist.id ${where} ORDER BY actdate ASC`
+  const sql = `
+    SELECT 
+    actid, class, actname, actdate, acttime, location, area, picture, cover, descriptions, eaid, event_id, event_artists.artist_id, id, photo, GROUP_CONCAT(artist.art_name ORDER BY artist.art_name SEPARATOR ', ') AS artists
+    FROM \`activity\` 
+    JOIN \`event_artists\` ON activity.actid = event_artists.event_id
+    JOIN \`artist\` ON event_artists.artist_id = artist.id 
+    ${where} 
+    GROUP BY actid
+    ORDER BY actdate 
+    ASC`
   console.log(sql)
   const [rows] = await db.query(sql)
 
@@ -108,23 +103,48 @@ router.get("/", async (req, res) => {
   }
 })
 
-//取得單項資料的 API // 點入單筆資料的話是用這個渲染嗎？
+// 0714改寫，單項的頁面我還是需要fetch多筆，需注意藝人部分是多個
+
 router.get("/:actid", async (req, res) => {
   const actid = +req.params.actid || 0 // 轉換為數字
   if (!actid) {
     return res.json({ success: false, error: "沒有編號" })
   }
-  const t_sql = `SELECT * FROM activity JOIN artist ON activity.artist_id = artist.id WHERE actid=${actid}`
-  const [rows] = await db.query(t_sql)
-  if (!rows.length) {
+  const t_sql = `
+  SELECT actid, class, actname, eaid, event_id, event_artists.artist_id, id, art_name, photo 
+  FROM \`activity\` 
+  JOIN \`event_artists\` ON activity.actid = event_artists.event_id 
+  JOIN \`artist\` ON event_artists.artist_id = artist.id 
+  WHERE actid=${actid} 
+  ORDER BY actdate 
+  ASC`
+  const [rows2] = await db.query(t_sql)
+  if (!rows2.length) {
     // 沒有該筆資料
     return res.json({ success: false, error: "沒有該筆資料" })
   }
-  const m = moment(rows[0].actdate)
-  const t = moment(rows[0].acttime, 'HH:mm:ss')
-  rows[0].actdate = m.isValid() ? m.format(dateFormat) : ''
-  rows[0].acttime = t.isValid() ? t.format(timeFormat) : ''
-  res.json({ success: true, data: rows[0] })
+  res.json({ success: true, rows2: rows2 })
 })
+
+
+
+// 取得單項資料的 API // 點入單筆資料的話是用這個渲染嗎？
+// router.get("/:actid", async (req, res) => {
+//   const actid = +req.params.actid || 0 // 轉換為數字
+//   if (!actid) {
+//     return res.json({ success: false, error: "沒有編號" })
+//   }
+//   const t_sql = `SELECT * FROM activity JOIN artist ON activity.artist_id = artist.id WHERE actid=${actid}`
+//   const [rows] = await db.query(t_sql)
+//   if (!rows.length) {
+//     // 沒有該筆資料
+//     return res.json({ success: false, error: "沒有該筆資料" })
+//   }
+//   const m = moment(rows[0].actdate)
+//   const t = moment(rows[0].acttime, 'HH:mm:ss')
+//   rows[0].actdate = m.isValid() ? m.format(dateFormat) : ''
+//   rows[0].acttime = t.isValid() ? t.format(timeFormat) : ''
+//   res.json({ success: true, data: rows[0] })
+// })
 
 export default router
