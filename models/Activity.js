@@ -11,22 +11,20 @@ export default async function (sequelize) {
         primaryKey: true,
         autoIncrement: true,
       },
-      activity_class: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'aclass',
-          key: 'id',
-        },
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
-      },
-      activity_name: {
+      class: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      a_datetime: {
-        type: DataTypes.DATE,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      actdate: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+      },
+      acttime: {
+        type: DataTypes.TIME,
         allowNull: false,
       },
       location: {
