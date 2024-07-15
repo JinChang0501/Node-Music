@@ -65,13 +65,13 @@ const getListData = async (req) => {
 
   const sql = `
     SELECT 
-    actid, class, actname, actdate, acttime, location, area, picture, cover, descriptions, eaid, event_id, event_artists.artist_id, id, photo, GROUP_CONCAT(artist.art_name ORDER BY artist.art_name SEPARATOR ', ') AS artists
-    FROM \`activity\` 
-    JOIN \`event_artists\` ON activity.actid = event_artists.event_id
-    JOIN \`artist\` ON event_artists.artist_id = artist.id 
+    e.actid, e.class, e.actname, e.actdate, e.acttime, e.location, e.area, e.picture, e.cover, e.descriptions, ea.eaid, ea.event_id, ea.artist_id, a.id, a.photo, GROUP_CONCAT(a.art_name ORDER BY a.art_name SEPARATOR ', ') AS artists
+    FROM \`activity\` AS e
+    JOIN \`event_artists\` AS ea ON e.actid = ea.event_id
+    JOIN \`artist\` AS a ON ea.artist_id = a.id 
     ${where} 
-    GROUP BY actid
-    ORDER BY actdate 
+    GROUP BY e.actid, e.class, e.actname, e.actdate, e.acttime, e.location, e.area, e.picture, e.cover, e.descriptions, ea.eaid, ea.event_id, ea.artist_id, a.id, a.photo
+    ORDER BY e.actdate 
     ASC`
   console.log(sql)
   const [rows] = await db.query(sql)
