@@ -13,6 +13,8 @@ const getListData = async (req) => {
   let keyword = req.query.keyword || ""
   let actClass = req.query.actClass || ""
   let area = req.query.area || ""
+  let dateRange = req.query.dateRange || ""
+
   let date_begin = req.query.date_begin || ""
   let date_end = req.query.date_end || ""
   // let time_begin = req.query.time_begin || ""
@@ -27,7 +29,7 @@ const getListData = async (req) => {
   }
 
 
-  if(actClass) {
+  if (actClass) {
     if(actClass === "1"){
       where += ` AND \`class\` = "concert" `
     } else if (actClass === "2") {
@@ -37,7 +39,7 @@ const getListData = async (req) => {
     }
   }
 
-  if(area) {
+  if (area) {
     if(area === "1"){
       where += ` AND \`area\` = "北部" `
     } else if (area === "2") {
@@ -47,6 +49,29 @@ const getListData = async (req) => {
     } else {
       // 全部，就不篩
     }
+  }
+
+  // 日期 篩選
+  let startDate, endDate
+  const today = moment()
+
+  if (dateRange) {
+    if(dateRange === "two_weeks"){
+      startDate = today
+      endDate = today.clone().add(2, 'weeks')
+      where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+    } else if (dateRange === "this_month") {
+      startDate = today.startOf('month')
+      endDate = today.endOf('month')
+      where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+    } else if (dateRange === "next_month") {
+      startDate = today.clone().add(1, 'month').startOf('month')
+      endDate = today.clone().add(1, 'month').endOf('month')
+      where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+    } else {
+      // 全部，就不篩
+    }
+    
   }
 
   if (date_begin) {
