@@ -19,11 +19,26 @@ import db from '../utils/connect-mysql.js'
 //   // 處理如果沒找到資料
 // })
 
-//GET - 得到所有登入之會員的購物紀錄
+// GET - 得到所有登入之會員的購物紀錄
 router.get('/', authenticate, async function (req, res) {
   const id = +req.user.id
 
-  const sql = `SELECT a.order_num FROM order_detail as a join product as b on a.product_id = b.id WHERE a.member_id = ${id} group by a.order_num;`
+  const sql = `SELECT 
+    a.order_num,
+    MIN(b.picture) AS firstProductName,
+    MIN(b.name) AS firstProductName,
+    COUNT(a.id) AS totalCount,
+    sum(b.price) AS totalPrice
+FROM 
+    order_detail AS a 
+JOIN 
+    product AS b 
+ON 
+    a.product_id = b.id 
+WHERE 
+    a.member_id = ${id}
+GROUP BY 
+    a.order_num;`
 
   const [result] = await db.query(sql)
   // res.json({ result })
