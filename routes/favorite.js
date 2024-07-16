@@ -13,7 +13,7 @@ import db from "../utils/connect-mysql.js"
 // 此路由只有登入會員能使用 authenticate
 
 // 加入收藏
-router.post('/', authenticate, async (req, res) => {
+router.post('/:userId', authenticate, async (req, res) => {
   const { userId, eventId } = req.body
   const p_sql = `INSERT INTO \`favorite\` (member_id, item_id) VALUES (?, ?)`
 
@@ -26,7 +26,7 @@ router.post('/', authenticate, async (req, res) => {
 })
 
 // 取消收藏
-router.delete('/:userId', authenticate, async (req, res) => {
+router.delete('/', authenticate, async (req, res) => {
   const { userId, eventId } = req.body
   const d_sql = `DELETE FROM \`favorite\` WHERE member_id = ? AND item_id = ?`
 
@@ -40,7 +40,7 @@ router.delete('/:userId', authenticate, async (req, res) => {
 
 // 獲取使用者收藏的活動
 // 測試先刪 authenticate，測試完記得補上登入驗證
-router.get('/:userId', authenticate, async (req, res) => {
+router.get('/:userId', async (req, res) => {
   const { userId } = req.params
   // const id = +req.user.id
   const sql = `SELECT * FROM \`favorite\` WHERE member_id = ?`
