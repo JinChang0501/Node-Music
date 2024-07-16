@@ -3,28 +3,20 @@ import db from '../utils/connect-mysql.js'
 
 const router = express.Router()
 
-const getTicketData = async (req) => {
-  let success = false
-  const sql = `SELECT * FROM ticket`
+// 获取与活动 ID 相匹配的 Ticket 数据
+router.get('/activity/:actid', async (req, res) => {
+  const { actid } = req.params
 
-  console.log(sql)
-  const [rows] = await db.query(sql)
-
-  success = true
-  return {
-    success,
-    rows,
-    qs: req.query,
-  }
-}
-
-router.get('/', async (req, res) => {
   try {
-    const data = await getTicketData(req)
-    res.json(data)
+    const sql = `SELECT * FROM ticket WHERE activity_id = ?`
+    const [rows] = await db.query(sql, [actid])
+    res.json({
+      success: true,
+      tickets: rows,
+    })
   } catch (error) {
-    console.error('Error api route', error)
-    res.status(500).json({ success: false, error: 'Internet Server Error ' })
+    console.error('Error fetching ticket data:', error)
+    res.status(500).json({ success: false, error: 'Internal Server Error' })
   }
 })
 
