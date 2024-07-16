@@ -25,7 +25,7 @@ router.get('/', authenticate, async function (req, res) {
 
   const sql = `SELECT 
     a.order_num,
-    MIN(b.picture) AS firstProductName,
+    MIN(b.picture) AS firstProductPicture,
     MIN(b.name) AS firstProductName,
     COUNT(a.id) AS totalCount,
     sum(b.price) AS totalPrice
