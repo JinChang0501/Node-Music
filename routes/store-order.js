@@ -28,7 +28,8 @@ router.get('/', authenticate, async function (req, res) {
     MIN(b.picture) AS firstProductPicture,
     MIN(b.name) AS firstProductName,
     COUNT(a.id) AS totalCount,
-    sum(b.price) AS totalPrice
+    sum(b.price) AS totalPrice,
+    a.created_at
 FROM 
     order_detail AS a 
 JOIN 
@@ -38,7 +39,7 @@ ON
 WHERE 
     a.member_id = ${id}
 GROUP BY 
-    a.order_num;`
+    a.order_num, a.created_at;`
 
   const [result] = await db.query(sql)
   // res.json({ result })
