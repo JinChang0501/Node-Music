@@ -6,7 +6,14 @@ const router = express.Router()
 const getTicketByActivityId = async (req, res) => {
   const { actid } = req.params
   let success = false
-  const sql = `SELECT * FROM ticket WHERE activity_id = ?`
+  const sql = `
+    SELECT t.*, a.actname, a.actdate, a.acttime, a.location, ar.art_name, m.name, m.email
+    FROM ticket t
+    JOIN activity a ON t.activity_id = a.actid
+    LEFT JOIN artist ar ON a.artist_id = ar.id
+    LEFT JOIN member m ON t.member_id = m.id
+    WHERE t.activity_id = ?
+  `
 
   try {
     const [rows] = await db.query(sql, [actid])
