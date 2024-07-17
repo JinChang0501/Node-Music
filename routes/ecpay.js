@@ -54,9 +54,23 @@ router.get('/payment', authenticate, async (req, res, next) => {
   const digest = 'hex'
   const APIURL = `https://payment${stage}.ecpay.com.tw/Cashier/AioCheckOut/V5`
   // 交易編號
+  // const MerchantTradeNo =
+  //   new Date().toISOString().split('T')[0].replaceAll('-', '') +
+  //   crypto.randomBytes(32).toString('base64').substring(0, 12)
+  // 生成隨機字母和數字
+  function generateRandomString(length) {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let result = ''
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length)
+      result += characters[randomIndex]
+    }
+    return result
+  }
   const MerchantTradeNo =
     new Date().toISOString().split('T')[0].replaceAll('-', '') +
-    crypto.randomBytes(32).toString('base64').substring(0, 12)
+    generateRandomString(7)
 
   // 交易日期時間
   const MerchantTradeDate = new Date().toLocaleDateString('zh-TW', {
