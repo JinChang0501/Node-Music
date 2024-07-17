@@ -64,7 +64,7 @@ router.get('/', authenticate, async (req, res) => {
   try {
     const [rows] = await db.query(sql, id)
     const favorites = rows.map(row => row.item_id)
-    res.status(200).json({ status: 'success', rows: { favorites } })
+    res.status(200).json({ success: true, rows: { favorites } })
   } catch (error) {
     res.status(500).json({ error: '無法獲取收藏' })
   }
