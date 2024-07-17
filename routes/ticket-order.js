@@ -31,7 +31,33 @@ router.get('/', authenticate, async function (req, res) {
 FROM ticket AS a
 JOIN activity AS b ON a.activity_id = b.actid
 WHERE a.member_id = ${id}
-GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class;`
+GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class Order by a.created_at desc;`
+
+  const [result] = await db.query(sql)
+  // res.json({ result })
+  return res.json({ status: 'success', data: { result } })
+  // 處理如果沒找到資料
+})
+
+router.get('/:sortBy', authenticate, async function (req, res) {
+  const id = +req.user.id
+  let sortBy = req.params.sortBy || ''
+  let where = `a.member_id = ` + id
+  let sort = 'a.created_at'
+  if (sortBy === 'desc') {
+    sort += ` desc`
+  } else {
+    sort = `a.created_at asc`
+  }
+
+  const sql = `SELECT
+    a.order_num, a.created_at, b.actname, 
+    b.location, b.actdate, b.acttime, count(a.order_num) as amount , b.class
+    FROM ticket AS a
+    JOIN activity AS b ON a.activity_id = b.actid
+    WHERE ${where}
+    GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class 
+    Order by ${sort}`
 
   const [result] = await db.query(sql)
   // res.json({ result })
