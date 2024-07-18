@@ -59,33 +59,39 @@ router.delete('/', authenticate, async (req, res) => {
 router.get('/', authenticate, async (req, res) => {
   // const { userId } = req.params
   const id = +req.user.id
-  const sql = `SELECT item_id FROM \`favorite\` WHERE member_id = ?`
+  // const sql = `SELECT item_id FROM \`favorite\` WHERE member_id = ?`
+  const cal_sql = 
+  `SELECT a.actname, a.actdate, a.acttime, f.item_id
+  FROM \`activity\` as a
+  JOIN \`favorite\` as f
+  ON a.actid = f.item_id
+  WHERE f.member_id = ?`
 
   try {
-    const [rows] = await db.query(sql, id)
-    const favorites = rows.map(row => row.item_id)
-    res.status(200).json({ success: true, rows: { favorites } })
+    const [activity] = await db.query(cal_sql, id)
+    const favorites = activity.map(row => row.item_id)
+    res.status(200).json({ success: true, rows: { favorites, activity } })
   } catch (error) {
     res.status(500).json({ error: '無法獲取收藏' })
   }
 })
 
 // 確認是否收藏
-router.get('/check', async (req, res) => {
-  const { eventId } = req.query
-  const id = +req.user.id
-  const c_sql = `SELECT * FROM favorites WHERE member_id = ? AND item_id = ?`
+// router.get('/check/:eventId', authenticate, async (req, res) => {
+//   const { eventId } = req.query
+//   const id = +req.user.id
+//   const c_sql = `SELECT * FROM favorites WHERE member_id = ? AND item_id = ?`
 
-  try {
-    const [rows] = await db.query(c_sql, [id, eventId])
-    if (results.length > 0) {
-      res.status(200).json({ isFavorite: true })
-    } else {
-      res.status(200).json({ isFavorite: false })
-    }
-  } catch (error) {
-    res.status(500).json({ error: '無法確認收藏狀態' })
-  }
-})
+//   try {
+//     const [rows] = await db.query(c_sql, [id, eventId])
+//     if (rows.length > 0) {
+//       res.status(200).json({ isFavorite: true })
+//     } else {
+//       res.status(200).json({ isFavorite: false })
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: '無法確認收藏狀態' })
+//   }
+// })
 
 export default router
