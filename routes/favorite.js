@@ -1,4 +1,5 @@
 import express from 'express'
+import moment from "moment-timezone"
 const router = express.Router()
 
 // 檢查空物件, 轉換req.params為數字
@@ -11,6 +12,9 @@ import db from "../utils/connect-mysql.js"
 
 // 獲得某會員id的 有加入到我的最愛清單中的商品id們
 // 此路由只有登入會員能使用 authenticate
+
+const dateFormat = "YYYY-MM-DD"
+const timeFormat = "HH:mm"
 
 // 加入收藏
 router.post('/', authenticate, async (req, res) => {
@@ -42,20 +46,6 @@ router.delete('/', authenticate, async (req, res) => {
 })
 
 // 獲取使用者收藏的活動
-// 測試先刪 authenticate，測試完記得補上登入驗證
-// router.get('/:userId', async (req, res) => {
-//   const { userId } = req.params
-//   // const id = +req.user.id
-//   const sql = `SELECT * FROM \`favorite\` WHERE member_id = ?`
-
-//   try {
-//     const [results] = await db.query(sql, [userId])
-//     res.status(200).json(results)
-//   } catch (error) {
-//     res.status(500).json({ error: '無法獲取收藏' })
-//   }
-// })
-
 router.get('/', authenticate, async (req, res) => {
   // const { userId } = req.params
   const id = +req.user.id
@@ -68,30 +58,19 @@ router.get('/', authenticate, async (req, res) => {
   WHERE f.member_id = ?`
 
   try {
-    const [activity] = await db.query(cal_sql, id)
-    const favorites = activity.map(row => row.item_id)
-    res.status(200).json({ success: true, rows: { favorites, activity } })
+    const [activities] = await db.query(cal_sql, id)
+    const favorites = activities.map(row => row.item_id)
+    activities.forEach((el) => {
+      const m = moment(el.actdate)
+      const t = moment(el.acttime, 'HH:mm:ss')
+      // 無效的日期格式，使用空字串
+      el.actdate = m.isValid() ? m.format(dateFormat) : ""
+      el.acttime = t.isValid() ? t.format(timeFormat) : ""
+    })
+    res.status(200).json({ success: true, rows: { favorites, activities } })
   } catch (error) {
     res.status(500).json({ error: '無法獲取收藏' })
   }
 })
-
-// 確認是否收藏
-// router.get('/check/:eventId', authenticate, async (req, res) => {
-//   const { eventId } = req.query
-//   const id = +req.user.id
-//   const c_sql = `SELECT * FROM favorites WHERE member_id = ? AND item_id = ?`
-
-//   try {
-//     const [rows] = await db.query(c_sql, [id, eventId])
-//     if (rows.length > 0) {
-//       res.status(200).json({ isFavorite: true })
-//     } else {
-//       res.status(200).json({ isFavorite: false })
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: '無法確認收藏狀態' })
-//   }
-// })
 
 export default router
