@@ -63,4 +63,23 @@ router.get('/', authenticate, async function (req, res) {
   // 處理如果沒找到資料
 })
 
+router.delete('/:activity_id', authenticate, async function (req, res) {
+  const id = +req.user.id
+  // const { actid } = req.body
+  console.log('-------以下是req.params')
+  // console.log(req.params.actid)
+  let activity_id = req.params.activity_id || ''
+  let where = `member_id = ` + id
+  if (activity_id !== '') {
+    where += ` AND item_id = ` + activity_id
+  }
+
+  const sql = `DELETE FROM favorite WHERE ${where}`
+
+  const [result] = await db.query(sql)
+  // res.json({ result })
+  return res.json({ status: 'success', data: { result } })
+  // 處理如果沒找到資料
+})
+
 export default router
