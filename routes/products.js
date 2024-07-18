@@ -8,8 +8,7 @@ import { getIdParam } from '#db-helpers/db-tool.js'
 import sequelize from '#configs/db.js'
 const { Product } = sequelize.models
 import { QueryTypes, Op } from 'sequelize'
-import db from "../utils/connect-mysql.js"
-
+import db from '#configs/mysql.js'
 
 /* 
 測試連結:
