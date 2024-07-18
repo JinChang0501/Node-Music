@@ -60,13 +60,13 @@ router.get('/', authenticate, async (req, res) => {
   try {
     const [activities] = await db.query(cal_sql, id)
     const favorites = activities.map(row => row.item_id)
-    activities.forEach((el) => {
-      const m = moment(el.actdate)
-      const t = moment(el.acttime, 'HH:mm:ss')
-      // 無效的日期格式，使用空字串
-      el.actdate = m.isValid() ? m.format(dateFormat) : ""
-      el.acttime = t.isValid() ? t.format(timeFormat) : ""
-    })
+    // activities.forEach((el) => {
+    //   const m = moment(el.actdate)
+    //   const t = moment(el.acttime, 'HH:mm:ss')
+    //   // 無效的日期格式，使用空字串
+    //   el.actdate = m.isValid() ? m.format(dateFormat) : ""
+    //   el.acttime = t.isValid() ? t.format(timeFormat) : ""
+    // })
     res.status(200).json({ success: true, rows: { favorites, activities } })
   } catch (error) {
     res.status(500).json({ error: '無法獲取收藏' })
