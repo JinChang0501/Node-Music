@@ -27,11 +27,11 @@ router.get('/', authenticate, async function (req, res) {
 
   // const sql = `SELECT * FROM ticket AS a JOIN activity AS b ON a.activity_id = b.actid where a.member_id = ${id}`
 
-  const sql = `SELECT a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, count(a.order_num) as amount , b.class
+  const sql = `SELECT a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, count(a.order_num) as amount , b.class, b.picinfrontend
 FROM ticket AS a
 JOIN activity AS b ON a.activity_id = b.actid
 WHERE a.member_id = ${id}
-GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class Order by a.created_at desc;`
+GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class,b.picinfrontend Order by a.created_at desc;`
 
   const [result] = await db.query(sql)
   // res.json({ result })
@@ -52,11 +52,11 @@ router.get('/:sortBy', authenticate, async function (req, res) {
 
   const sql = `SELECT
     a.order_num, a.created_at, b.actname, 
-    b.location, b.actdate, b.acttime, count(a.order_num) as amount , b.class
+    b.location, b.actdate, b.acttime, count(a.order_num) as amount , b.class,b.picinfrontend
     FROM ticket AS a
     JOIN activity AS b ON a.activity_id = b.actid
     WHERE ${where}
-    GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class 
+    GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class ,b.picinfrontend
     Order by ${sort}`
 
   const [result] = await db.query(sql)
