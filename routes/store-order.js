@@ -18,7 +18,7 @@ router.get('/', authenticate, async function (req, res) {
     a.order_num,
     MIN(b.picture) AS firstProductPicture,
     MIN(b.name) AS firstProductName,
-    COUNT(a.id) AS totalCount,
+    sum(a.quantity) AS totalCount,
     sum(b.price) AS totalPrice,
     a.created_at
 FROM 
