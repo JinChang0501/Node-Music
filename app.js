@@ -56,11 +56,47 @@ app.use(
     secret: '67f71af4602195de2450faeb6f8856c0', // 安全字串，應用一個高安全字串
     cookie: {
       maxAge: 30 * 86400000, // 30 * (24 * 60 * 60 * 1000) = 30 * 86400000 => session保存30天
+      // 以下三行新加，若其他人有被擋掉東西可刪。
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // 在生產環境中使用 HTTPS
+      sameSite: 'lax',
     },
     resave: false,
     saveUninitialized: false,
   })
 )
+
+// spotify資料token更新
+app.post('/refresh_token', function (req, res) {
+  const client_id = a95421f6a14e4aedb3f416099b3de0ba
+  const client_secret = e9d4221ebec54d2cb19547003c8660fa
+  const refresh_token = req.body.refresh_token
+  const authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization:
+        'Basic ' +
+        Buffer.from(client_id + ':' + client_secret).toString('base64'),
+    },
+    form: {
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token,
+    },
+    json: true,
+  }
+
+  req.post(authOptions, function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+      res.json({
+        access_token: body.access_token,
+        refresh_token: body.refresh_token,
+      })
+    } else {
+      res.status(400).json({ error: 'Failed to refresh token' })
+    }
+  })
+})
 
 // 載入routes中的各路由檔案，並套用api路由 START
 const apiPath = '/api' // 預設路由
