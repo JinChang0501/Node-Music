@@ -68,8 +68,8 @@ app.use(
 
 // spotify資料token更新
 app.post('/refresh_token', function (req, res) {
-  const client_id = a95421f6a14e4aedb3f416099b3de0ba
-  const client_secret = e9d4221ebec54d2cb19547003c8660fa
+  const client_id = process.env.SPOTIFY_CLIENT_ID
+  const client_secret = process.env.SPOTIFY_CLIENT_SECRET
   const refresh_token = req.body.refresh_token
   const authOptions = {
     url: 'https://accounts.spotify.com/api/token',
