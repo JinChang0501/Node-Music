@@ -11,6 +11,12 @@ import session from 'express-session'
 // import querystring from 'querystring'
 // import dotenv from 'dotenv'
 // dotenv.config()
+import fetch from 'node-fetch'
+import { Buffer } from 'buffer'
+const client_id = 'a95421f6a14e4aedb3f416099b3de0ba'
+const client_secret = 'e9d4221ebec54d2cb19547003c8660fa'
+const redirectUri = 'http://localhost:3005/callback'
+const scopes = 'user-read-private user-read-email'
 
 // 使用檔案的session store，存在sessions資料夾
 import sessionFileStore from 'session-file-store'
@@ -71,6 +77,34 @@ app.use(
   })
 )
 
+app.get('/callback', async (req, res) => {
+  const code = req.query.code
+
+  const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization:
+        'Basic ' +
+        Buffer.from(client_id + ':' + client_secret).toString('base64'),
+    },
+    body: new URLSearchParams({
+      code: code,
+      redirect_uri: redirectUri,
+      grant_type: 'authorization_code',
+    }),
+  })
+
+  if (tokenResponse.ok) {
+    const data = await tokenResponse.json()
+    const { access_token, refresh_token, expires_in } = data
+
+    // 在這裡保存 tokens，可能存儲在數據庫或安全的會話中
+    res.json({ access_token, refresh_token, expires_in })
+  } else {
+    res.status(tokenResponse.status).json({ error: 'Failed to obtain tokens' })
+  }
+})
 // spotify資料token更新
 // app.post('/refresh_token', async function (req, res) {
 //   const client_id = process.env.SPOTIFY_CLIENT_ID
