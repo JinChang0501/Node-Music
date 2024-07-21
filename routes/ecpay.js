@@ -10,6 +10,8 @@ const { Purchase_Order } = sequelize.models
 
 // 中介軟體，存取隱私會員資料用
 import authenticate from '#middlewares/authenticate.js'
+import { v4 as uuidv4 } from 'uuid'
+import { createLinePayClient } from 'line-pay-merchant'
 
 //綠界全方位金流技術文件：
 // https://developers.ecpay.com.tw/?p=2856
@@ -28,13 +30,135 @@ const ReturnURL = process.env.ECPAY_RETURN_URL
 const OrderResultURL = process.env.ECPAY_ORDER_RESULT_URL
 const ReactClientBackURL = process.env.ECPAY_ORDER_CALLBACK_URL
 
+const linePayClient = createLinePayClient({
+  channelId: process.env.LINE_PAY_CHANNEL_ID,
+  channelSecretKey: process.env.LINE_PAY_CHANNEL_SECRET,
+  env: process.env.NODE_ENV,
+})
+
+router.post('/create-order', authenticate, async (req, res) => {
+  // 會員id由authenticate中介軟體提供
+  const userId = req.user.id
+
+  //產生 orderId與packageId
+  function generateOrderId(length) {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let result = ''
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length)
+      result += characters[randomIndex]
+    }
+    return result
+  }
+
+  const id = generateOrderId(7)
+  const packageId = uuidv4()
+
+  // 要傳送給line pay的訂單資訊
+  const order = {
+    id: id,
+    currency: 'TWD',
+    amount: req.body.amount,
+    packages: [
+      {
+        id: packageId,
+        amount: req.body.amount,
+        products: req.body.products,
+      },
+    ],
+    options: { display: { locale: 'zh_TW' } },
+  }
+
+  //console.log(order)
+
+  // 要儲存到資料庫的order資料
+  const dbOrder = {
+    id: id,
+    user_id: userId,
+    amount: req.body.amount,
+    status: 'pending', // 'pending' | 'paid' | 'cancel' | 'fail' | 'error'
+    order_info: JSON.stringify(order), // 要傳送給line pay的訂單資訊
+  }
+
+  // 儲存到資料庫
+  await Purchase_Order.create(dbOrder)
+
+  // 回傳給前端的資料
+  res.json({ status: 'success', data: { order } })
+})
+
+router.get('/confirm', async (req, res) => {
+  // 網址上需要有transactionId
+  const transactionId = req.query.transactionId
+
+  // 從資料庫取得交易資料
+  const dbOrder = await Purchase_Order.findOne({
+    where: { transaction_id: transactionId },
+    raw: true, // 只需要資料表中資料
+  })
+
+  console.log(dbOrder)
+
+  // 交易資料
+  const transaction = JSON.parse(dbOrder.reservation)
+
+  console.log(transaction)
+
+  // 交易金額
+  const amount = transaction.amount
+
+  try {
+    // 最後確認交易
+    const linePayResponse = await linePayClient.confirm.send({
+      transactionId: transactionId,
+      body: {
+        currency: 'TWD',
+        amount: amount,
+      },
+    })
+
+    // linePayResponse.body回傳的資料
+    console.log(linePayResponse)
+
+    //transaction.confirmBody = linePayResponse.body
+
+    // status: 'pending' | 'paid' | 'cancel' | 'fail' | 'error'
+    let status = 'paid'
+
+    if (linePayResponse.body.returnCode !== '0000') {
+      status = 'fail'
+    }
+
+    // 更新資料庫的訂單狀態
+    const result = await Purchase_Order.update(
+      {
+        status,
+        return_code: linePayResponse.body.returnCode,
+        confirm: JSON.stringify(linePayResponse.body),
+      },
+      {
+        where: {
+          id: dbOrder.id,
+        },
+      }
+    )
+
+    console.log(result)
+
+    return res.json({ status: 'success', data: linePayResponse.body })
+  } catch (error) {
+    return res.json({ status: 'fail', data: error.data })
+  }
+})
+
 // 前端發送訂單id給後端，後端再發送要送到綠界的表單
-// http://localhost:3005/ecpay?orderId=123123
+// http://localhost:3005/ecpay?id=123123
 router.get('/payment', authenticate, async (req, res, next) => {
   // 從資料庫得到order資料
-  const orderId = req.query.orderId
+  const id = req.query.id
   // 從資料庫取得訂單資料
-  const orderRecord = await Purchase_Order.findByPk(orderId, {
+  const orderRecord = await Purchase_Order.findByPk(id, {
     raw: true, // 只需要資料表中資料
   })
 
@@ -53,7 +177,7 @@ router.get('/payment', authenticate, async (req, res, next) => {
   const algorithm = 'sha256'
   const digest = 'hex'
   const APIURL = `https://payment${stage}.ecpay.com.tw/Cashier/AioCheckOut/V5`
-  // 交易編號
+  // // 交易編號
   // const MerchantTradeNo =
   //   new Date().toISOString().split('T')[0].replaceAll('-', '') +
   //   crypto.randomBytes(32).toString('base64').substring(0, 12)
@@ -68,10 +192,7 @@ router.get('/payment', authenticate, async (req, res, next) => {
     }
     return result
   }
-  const MerchantTradeNo =
-    new Date().toISOString().split('T')[0].replaceAll('-', '') +
-    generateRandomString(7)
-
+  const MerchantTradeNo = generateRandomString(7)
   // 交易日期時間
   const MerchantTradeDate = new Date().toLocaleDateString('zh-TW', {
     year: 'numeric',
