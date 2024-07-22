@@ -74,11 +74,9 @@ function CheckMacValueGen(parameters, algorithm, digest) {
   return Step6
 }
 
-// 其他必要的引入
-// import { authenticate } from 'some-auth-middleware';
-
 router.post('/create-order', authenticate, async (req, res) => {
   const userId = req.user.id
+
   const selectedSeatDetails = req.body.selectedSeatDetails
 
   if (!selectedSeatDetails || selectedSeatDetails.length === 0) {
@@ -108,8 +106,8 @@ router.post('/create-order', authenticate, async (req, res) => {
   // 設置資料庫更新操作
   const updatePromises = selectedSeatDetails.map((seat) => {
     return db.query(
-      'UPDATE ticket SET member_id = ?, amount = ?, order_info = ? WHERE tid = ?',
-      [userId, req.body.amount, JSON.stringify(order), seat.tid]
+      'UPDATE ticket SET member_id = ?, order_num = ?, amount = ?, order_info = ? WHERE tid = ?',
+      [userId, order.id, req.body.amount, JSON.stringify(order), seat.tid]
     )
   })
 
@@ -127,15 +125,35 @@ router.get('/payment', authenticate, async (req, res) => {
 
   try {
     // 從資料庫取得訂單資料
-    const [rows] = await db.query('SELECT * FROM ticket WHERE tid = ?', [id])
+    const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
+      id,
+    ])
     const orderRecord = rows[0]
 
-    console.log('獲得訂單資料，內容如下：')
-    console.log(orderRecord)
+    if (!orderRecord) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: '訂單資料未找到' })
+    }
+
+    // 從資料庫或其他來源獲取 selectedSeatDetails 資料
+    const [seatDetailsRows] = await db.query(
+      'SELECT * FROM ticket WHERE order_num = ?',
+      [id]
+    )
+    const selectedSeatDetails = seatDetailsRows.map((seat) => ({
+      name: `${seat.seat_area} 區 ${seat.seat_row} 排 ${seat.seat_number} 號`,
+      price: seat.price,
+    }))
+
+    // 組合 ItemName 字段
+    const itemNames = selectedSeatDetails
+      .map((seat) => `[${seat.name}]`)
+      .join('、')
 
     const TotalAmount = orderRecord.amount
     const TradeDesc = '商店線上付款'
-    const ItemName = '訂單編號' + orderRecord.tid + '商品一批'
+    const ItemName = `訂單編號: ${orderRecord.order_num}、${itemNames}`
     const ChoosePayment = 'ALL'
 
     const stage = isStage ? '-stage' : ''
@@ -183,7 +201,7 @@ router.get('/payment', authenticate, async (req, res) => {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>全方位金流-測試</title>
+    <title>Mak'in 製噪</title>
 </head>
 <body>
     <form method="post" action="${APIURL}">
