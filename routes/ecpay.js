@@ -16,6 +16,60 @@ const algorithm = 'sha256'
 const digest = 'hex'
 const APIURL = `https://payment${stage}.ecpay.com.tw/Cashier/AioCheckOut/V5`
 
+function generateRandomString(length) {
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length)
+    result += characters[randomIndex]
+  }
+  return result
+}
+
+function CheckMacValueGen(parameters, algorithm, digest) {
+  // const crypto = require('crypto')
+  let Step0
+
+  Step0 = Object.entries(parameters)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&')
+
+  function DotNETURLEncode(string) {
+    const list = {
+      '%2D': '-',
+      '%5F': '_',
+      '%2E': '.',
+      '%21': '!',
+      '%2A': '*',
+      '%28': '(',
+      '%29': ')',
+      '%20': '+',
+    }
+
+    Object.entries(list).forEach(([encoded, decoded]) => {
+      const regex = new RegExp(encoded, 'g')
+      string = string.replace(regex, decoded)
+    })
+
+    return string
+  }
+
+  const Step1 = Step0.split('&')
+    .sort((a, b) => {
+      const keyA = a.split('=')[0]
+      const keyB = b.split('=')[0]
+      return keyA.localeCompare(keyB)
+    })
+    .join('&')
+  const Step2 = `HashKey=${HashKey}&${Step1}&HashIV=${HashIV}`
+  const Step3 = DotNETURLEncode(encodeURIComponent(Step2))
+  const Step4 = Step3.toLowerCase()
+  const Step5 = crypto.createHash(algorithm).update(Step4).digest(digest)
+  const Step6 = Step5.toUpperCase()
+  return Step6
+}
+
 router.post('/', authenticate, async (req, res) => {
   try {
     const userId = req.user.id
@@ -83,8 +137,8 @@ router.post('/', authenticate, async (req, res) => {
     const TradeDesc = '商店線上付款'
     const ItemName = `訂單編號: ${orderRecord.order_num}、${itemNames}`
     const ChoosePayment = 'ALL'
-    const ReturnURL = process.env.ECPAY_RETURN_URL
-    const OrderResultURL = `http://localhost:3000/ticket/concert/finish/${actid}`
+    const ReturnURL = `http://localhost:3000/ticket/concert/finish/${actid}`
+    const OrderResultURL = 'http://localhost:3005/api/ecpay/callback'
 
     // 計算 CheckMacValue
     const MerchantTradeNo = `od${new Date().getFullYear()}${(
@@ -161,58 +215,48 @@ router.post('/', authenticate, async (req, res) => {
   }
 })
 
-function generateRandomString(length) {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let result = ''
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length)
-    result += characters[randomIndex]
-  }
-  return result
-}
+// 添加 ECPay 回調處理的路由
+router.post('/callback', async (req, res) => {
+  try {
+    const { MerchantTradeNo, RtnCode, OrderResultURL } = req.body
 
-function CheckMacValueGen(parameters, algorithm, digest) {
-  // const crypto = require('crypto')
-  let Step0
+    // 根據 MerchantTradeNo 獲取訂單資料
+    const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
+      MerchantTradeNo,
+    ])
+    const orderRecord = rows[0]
 
-  Step0 = Object.entries(parameters)
-    .map(([key, value]) => `${key}=${value}`)
-    .join('&')
-
-  function DotNETURLEncode(string) {
-    const list = {
-      '%2D': '-',
-      '%5F': '_',
-      '%2E': '.',
-      '%21': '!',
-      '%2A': '*',
-      '%28': '(',
-      '%29': ')',
-      '%20': '+',
+    if (!orderRecord) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: '訂單資料未找到' })
     }
 
-    Object.entries(list).forEach(([encoded, decoded]) => {
-      const regex = new RegExp(encoded, 'g')
-      string = string.replace(regex, decoded)
-    })
+    // 判斷付款結果
+    let status, payment, created_at
+    if (RtnCode === '1') {
+      // ECPay 的回調狀態碼 1 代表付款成功
+      status = '已付款'
+      payment = '信用卡'
+      created_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
+    } else {
+      status = '付款失敗'
+      payment = null
+      created_at = null
+    }
 
-    return string
+    // 更新資料表
+    await db.query(
+      'UPDATE ticket SET payment = ?, created_at = ?, status = ? WHERE order_num = ?',
+      [payment, created_at, status, MerchantTradeNo]
+    )
+
+    // 重定向到完成頁面
+    res.redirect(OrderResultURL)
+  } catch (error) {
+    console.error('處理付款回調時出錯:', error)
+    res.status(500).json({ status: 'error', message: '處理付款回調時發生錯誤' })
   }
-
-  const Step1 = Step0.split('&')
-    .sort((a, b) => {
-      const keyA = a.split('=')[0]
-      const keyB = b.split('=')[0]
-      return keyA.localeCompare(keyB)
-    })
-    .join('&')
-  const Step2 = `HashKey=${HashKey}&${Step1}&HashIV=${HashIV}`
-  const Step3 = DotNETURLEncode(encodeURIComponent(Step2))
-  const Step4 = Step3.toLowerCase()
-  const Step5 = crypto.createHash(algorithm).update(Step4).digest(digest)
-  const Step6 = Step5.toUpperCase()
-  return Step6
-}
+})
 
 export default router
