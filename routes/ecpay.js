@@ -11,7 +11,7 @@ const HashKey = process.env.ECPAY_HASH_KEY //3002607
 const HashIV = process.env.ECPAY_HASH_IV //3002607
 let isStage = process.env.ECPAY_TEST // 測試環境： true；正式環境：false
 const ReturnURL = process.env.ECPAY_RETURN_URL
-const OrderResultURL = process.env.ECPAY_ORDER_RESULT_URL
+const OrderResultURL = 'http://localhost:3000/ticket/concert/finish/1'
 const ReactClientBackURL = process.env.ECPAY_ORDER_CALLBACK_URL
 
 const linePayClient = createLinePayClient({
