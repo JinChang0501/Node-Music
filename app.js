@@ -7,6 +7,17 @@ import logger from 'morgan'
 import path from 'path'
 import session from 'express-session'
 
+// import axios from 'axios'
+// import querystring from 'querystring'
+// import dotenv from 'dotenv'
+// dotenv.config()
+import fetch from 'node-fetch'
+import { Buffer } from 'buffer'
+const client_id = 'a95421f6a14e4aedb3f416099b3de0ba'
+const client_secret = 'e9d4221ebec54d2cb19547003c8660fa'
+const redirectUri = 'http://localhost:3005/callback'
+const scopes = 'user-read-private user-read-email'
+
 // 使用檔案的session store，存在sessions資料夾
 import sessionFileStore from 'session-file-store'
 const FileStore = sessionFileStore(session)
@@ -56,11 +67,75 @@ app.use(
     secret: '67f71af4602195de2450faeb6f8856c0', // 安全字串，應用一個高安全字串
     cookie: {
       maxAge: 30 * 86400000, // 30 * (24 * 60 * 60 * 1000) = 30 * 86400000 => session保存30天
+      // 以下三行新加，若其他人有被擋掉東西可刪。
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // 在生產環境中使用 HTTPS
+      sameSite: 'lax',
     },
     resave: false,
     saveUninitialized: false,
   })
 )
+
+app.get('/callback', async (req, res) => {
+  const code = req.query.code
+
+  const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization:
+        'Basic ' +
+        Buffer.from(client_id + ':' + client_secret).toString('base64'),
+    },
+    body: new URLSearchParams({
+      code: code,
+      redirect_uri: redirectUri,
+      grant_type: 'authorization_code',
+    }),
+  })
+
+  if (tokenResponse.ok) {
+    const data = await tokenResponse.json()
+    const { access_token, refresh_token, expires_in } = data
+
+    // 在這裡保存 tokens，可能存儲在數據庫或安全的會話中
+    res.json({ access_token, refresh_token, expires_in })
+  } else {
+    res.status(tokenResponse.status).json({ error: 'Failed to obtain tokens' })
+  }
+})
+// spotify資料token更新
+// app.post('/refresh_token', async function (req, res) {
+//   const client_id = process.env.SPOTIFY_CLIENT_ID
+//   const client_secret = process.env.SPOTIFY_CLIENT_SECRET
+//   const refresh_token = req.body.refresh_token
+//   const authOptions = {
+//     url: 'https://accounts.spotify.com/api/token',
+//     headers: {
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//       Authorization:
+//         'Basic ' +
+//         Buffer.from(client_id + ':' + client_secret).toString('base64'),
+//     },
+//     data: querystring.stringify({
+//       grant_type: 'refresh_token',
+//       refresh_token: refresh_token,
+//     }),
+//   }
+
+//   try {
+//     const response = await axios.post(authOptions.url, authOptions.data, {
+//       headers: authOptions.headers,
+//     })
+//     res.json({
+//       spotify_token: response.data.access_token,
+//       refresh_token: response.data.refresh_token || refresh_token,
+//     })
+//   } catch (error) {
+//     res.status(400).json({ error: 'Failed to refresh token' })
+//   }
+// })
 
 // 載入routes中的各路由檔案，並套用api路由 START
 const apiPath = '/api' // 預設路由
