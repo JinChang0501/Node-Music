@@ -13,6 +13,14 @@ export default async function (sequelize) {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      picture2: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      picture3: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       activity: {
         type: DataTypes.STRING,
         allowNull: true,
