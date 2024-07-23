@@ -225,26 +225,98 @@ router.post('/callback', async (req, res) => {
 
     // 判斷付款方式並設置 payment 欄位
     switch (PaymentType) {
-      case 'Credit':
+      case 'Credit_CreditCard':
         payment = '信用卡付款'
         break
-      case 'WebATM':
-        payment = '網路 ATM'
+      case 'Flexible_Installment':
+        payment = '圓夢彈性分期'
         break
-      case 'ATM':
-        payment = 'ATM 轉帳'
+      case 'TWQR_OPAY':
+        payment = '歐付寶TWQR 行動支付'
         break
-      case 'CVS':
-        payment = '超商代碼'
+      case 'BNPL_URICH':
+        payment = '裕富數位無卡分期'
         break
-      case 'BarCode':
-        payment = '手機條碼支付'
+      case 'WebATM_TAISHIN':
+        payment = '台新銀行WebATM'
         break
-      case 'EasyCard':
-        payment = '悠遊卡支付'
+      case 'WebATM_ESUN':
+        payment = '玉山銀行WebATM'
         break
-      case 'LINEPay':
-        payment = 'LINE Pay'
+      case 'WebATM_BOT':
+        payment = '台灣銀行WebATM'
+        break
+      case 'WebATM_FUBON':
+        payment = '台北富邦WebATM'
+        break
+      case 'WebATM_CHINATRUST':
+        payment = '中國信託WebATM'
+        break
+      case 'WebATM_FIRST':
+        payment = '第一銀行WebATM'
+        break
+      case 'WebATM_CATHAY':
+        payment = '國泰世華WebATM'
+        break
+      case 'WebATM_MEGA':
+        payment = '兆豐銀行WebATM'
+        break
+      case 'WebATM_LAND':
+        payment = '土地銀行WebATM'
+        break
+      case 'WebATM_TACHONG':
+        payment = '大眾銀行WebATM'
+        break
+      case 'WebATM_SINOPAC':
+        payment = '永豐銀行WebATM'
+        break
+      case 'ATM_TAISHIN':
+        payment = '台新銀行ATM'
+        break
+      case 'ATM_ESUN':
+        payment = '玉山銀行ATM'
+        break
+      case 'ATM_BOT':
+        payment = '台灣銀行ATM'
+        break
+      case 'ATM_FUBON':
+        payment = '台北富邦ATM'
+        break
+      case 'ATM_CHINATRUST':
+        payment = '中國信託ATM'
+        break
+      case 'ATM_FIRST':
+        payment = '第一銀行ATM'
+        break
+      case 'ATM_LAND':
+        payment = '土地銀行ATM'
+        break
+      case 'ATM_CATHAY':
+        payment = '國泰世華銀行ATM'
+        break
+      case 'ATM_TACHONG':
+        payment = '大眾銀行ATM'
+        break
+      case 'ATM_PANHSIN':
+        payment = '板信銀行ATM'
+        break
+      case 'CVS_CVS':
+        payment = '超商代碼繳款'
+        break
+      case 'CVS_OK':
+        payment = 'OK超商代碼繳款'
+        break
+      case 'CVS_FAMILY':
+        payment = '全家超商代碼繳款'
+        break
+      case 'CVS_HILIFE':
+        payment = '萊爾富超商代碼繳款'
+        break
+      case 'CVS_IBON':
+        payment = '7-11 ibon代碼繳款'
+        break
+      case 'BARCODE_BARCODE':
+        payment = '超商條碼繳款'
         break
       default:
         payment = '其他付款方式'
