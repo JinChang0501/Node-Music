@@ -16,29 +16,29 @@ const generateRandomString = function (length) {
   return text
 }
 
-router.get('/login', (req, res) => {
-  var scope =
-    'streaming \
-     user-read-email \
-     user-read-private'
+// router.get('/login', (req, res) => {
+//   var scope =
+//     'streaming \
+//      user-read-email \
+//      user-read-private'
 
-  var state = generateRandomString(16)
+//   var state = generateRandomString(16)
 
-  var auth_query_parameters = new URLSearchParams({
-    response_type: 'code',
-    client_id: spotify_client_id,
-    scope: scope,
-    //我有修改
-    redirect_uri: 'http://localhost:3005/api/spotify/callback',
-    state: state,
-  })
+//   var auth_query_parameters = new URLSearchParams({
+//     response_type: 'code',
+//     client_id: spotify_client_id,
+//     scope: scope,
+//     //我有修改
+//     redirect_uri: 'http://localhost:3005/api/spotify/callback',
+//     state: state,
+//   })
 
-  res.redirect(
-    // 回傳授權碼，用此交換token
-    'https://accounts.spotify.com/authorize/?' +
-      auth_query_parameters.toString()
-  )
-})
+//   res.redirect(
+//     // 回傳授權碼，用此交換token
+//     'https://accounts.spotify.com/authorize/?' +
+//       auth_query_parameters.toString()
+//   )
+// })
 
 // router.get('/login', (req, res) => {
 //   const scopes = 'streaming user-read-email user-read-private'
