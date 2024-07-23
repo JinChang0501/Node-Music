@@ -8,16 +8,17 @@ import path from 'path'
 import session from 'express-session'
 
 // for spotify
-// import axios from 'axios'
+import axios from 'axios'
 import dotenv from 'dotenv'
 dotenv.config()
 import 'dotenv/config.js'
 import fetch from 'node-fetch'
 import { Buffer } from 'buffer'
+import querystring from 'querystring'
 const spotify_client_id = process.env.SPOTIFY_CLIENT_ID
 const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
-const redirectUri = 'http://localhost:3005/callback'
-const scopes = 'user-read-private user-read-email'
+const redirect_uri = 'http://localhost:3005/callback'
+// const scopes = 'user-read-private user-read-email'
 
 // 使用檔案的session store，存在sessions資料夾
 import sessionFileStore from 'session-file-store'
@@ -78,70 +79,55 @@ app.use(
   })
 )
 
-// 跟著spotify 專案做
-app.get('/auth/login', (req, res) => {})
+// 跟著spotify 專案做 chatgpt.ver
 
-app.get('/auth/callback', (req, res) => {})
+app.get('/login', (req, res) => {
+  const scope = 'streaming user-read-email user-read-private'
+  const authUrl =
+    'https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: spotify_client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+    })
+  res.redirect(authUrl)
+})
 
-// app.get('/callback', async (req, res) => {
-//   const code = req.query.code
+app.get('/callback', async (req, res) => {
+  const code = req.query.code || null
+  try {
+    const response = await axios.post(
+      'https://accounts.spotify.com/api/token',
+      querystring.stringify({
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: redirect_uri,
+        client_id: spotify_client_id,
+        client_secret: spotify_client_secret,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    )
 
-//   const tokenResponse = await fetch('https://accounts.spotify.com/api/token', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//       Authorization:
-//         'Basic ' +
-//         Buffer.from(client_id + ':' + client_secret).toString('base64'),
-//     },
-//     body: new URLSearchParams({
-//       code: code,
-//       redirect_uri: redirectUri,
-//       grant_type: 'authorization_code',
-//     }),
-//   })
+    const { access_token, refresh_token } = response.data
+    res.redirect(
+      `/success?access_token=${access_token}&refresh_token=${refresh_token}`
+    )
+  } catch (error) {
+    res.send(error)
+  }
+})
 
-//   if (tokenResponse.ok) {
-//     const data = await tokenResponse.json()
-//     const { access_token, refresh_token, expires_in } = data
+app.get('/success', (req, res) => {
+  const { access_token, refresh_token } = req.query
+  res.send({ access_token, refresh_token })
+})
 
-//     // 在這裡保存 tokens，可能存儲在數據庫或安全的會話中
-//     res.json({ access_token, refresh_token, expires_in })
-//   } else {
-//     res.status(tokenResponse.status).json({ error: 'Failed to obtain tokens' })
-//   }
-// })
-// spotify資料token更新
-// app.post('/refresh_token', async function (req, res) {
-//   const client_id = process.env.SPOTIFY_CLIENT_ID
-//   const client_secret = process.env.SPOTIFY_CLIENT_SECRET
-//   const refresh_token = req.body.refresh_token
-//   const authOptions = {
-//     url: 'https://accounts.spotify.com/api/token',
-//     headers: {
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//       Authorization:
-//         'Basic ' +
-//         Buffer.from(client_id + ':' + client_secret).toString('base64'),
-//     },
-//     data: querystring.stringify({
-//       grant_type: 'refresh_token',
-//       refresh_token: refresh_token,
-//     }),
-//   }
-
-//   try {
-//     const response = await axios.post(authOptions.url, authOptions.data, {
-//       headers: authOptions.headers,
-//     })
-//     res.json({
-//       spotify_token: response.data.access_token,
-//       refresh_token: response.data.refresh_token || refresh_token,
-//     })
-//   } catch (error) {
-//     res.status(400).json({ error: 'Failed to refresh token' })
-//   }
-// })
+// spotify end
 
 // 載入routes中的各路由檔案，並套用api路由 START
 const apiPath = '/api' // 預設路由
@@ -171,5 +157,9 @@ app.use(function (err, req, res, next) {
   // 更改為錯誤訊息預設為JSON格式
   res.status(500).send({ error: err })
 })
+
+// app.listen(3005, () => {
+//   console.log('Server is running on port 3005')
+// })
 
 export default app
