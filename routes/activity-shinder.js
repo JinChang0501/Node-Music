@@ -1,22 +1,22 @@
-import express from "express"
-import moment from "moment-timezone"
-import db from "../utils/connect-mysql.js"
+import express from 'express'
+import moment from 'moment-timezone'
+import db from '../utils/connect-mysql.js'
 
 const router = express.Router()
-const dateFormat = "YYYY-MM-DD"
-const timeFormat = "HH:mm"
+const dateFormat = 'YYYY-MM-DD'
+const timeFormat = 'HH:mm'
 
 const getListData = async (req) => {
   let success = false
   // let redirect = ""
 
-  let keyword = req.query.keyword || ""
-  let date_begin = req.query.date_begin || ""
-  let date_end = req.query.date_end || ""
-  let time_begin = req.query.time_begin || ""
-  let time_end = req.query.time_end || ""
+  let keyword = req.query.keyword || ''
+  let date_begin = req.query.date_begin || ''
+  let date_end = req.query.date_end || ''
+  let time_begin = req.query.time_begin || ''
+  let time_end = req.query.time_end || ''
 
-  let where = " WHERE 1 "
+  let where = ' WHERE 1 '
   if (keyword) {
     // where += ` AND \`name\` LIKE '%${keyword}%' ` // 沒有處理 SQL injection
     const keyword_ = db.escape(`%${keyword}%`)
@@ -71,28 +71,27 @@ const getListData = async (req) => {
   }
 }
 
-
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const data = await getListData(req)
     res.json(data)
   } catch (error) {
-    console.error("Error in /api route:", error)
-    res.status(500).json({ success: false, error: "Internal Server Error" })
+    console.error('Error in /api route:', error)
+    res.status(500).json({ success: false, error: 'Internal Server Error' })
   }
 })
 
 //取得單項資料的 API // 點入單筆資料的話是用這個渲染嗎？
-router.get("/:actid", async (req, res) => {
+router.get('/:actid', async (req, res) => {
   const actid = +req.params.actid || 0 // 轉換為數字
   if (!actid) {
-    return res.json({ success: false, error: "沒有編號" })
+    return res.json({ success: false, error: '沒有編號' })
   }
   const t_sql = `SELECT * FROM activity JOIN artist ON activity.artist_id = artist.id WHERE actid=${actid}`
   const [rows] = await db.query(t_sql)
   if (!rows.length) {
     // 沒有該筆資料
-    return res.json({ success: false, error: "沒有該筆資料" })
+    return res.json({ success: false, error: '沒有該筆資料' })
   }
   const m = moment(rows[0].actdate)
   const t = moment(rows[0].acttime, 'HH:mm:ss')
