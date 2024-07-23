@@ -1,7 +1,9 @@
 import express from 'express'
+import moment from 'moment-timezone'
 import db from '../utils/connect-mysql.js'
 
 const router = express.Router()
+const dateFormat = 'YYYY-MM-DD'
 
 const getListData = async (req) => {
   let success = false
@@ -60,22 +62,29 @@ router.get('/', async (req, res) => {
   }
 })
 
-// 0714改寫，單項的頁面我還是需要fetch多筆，需注意藝人部分是多個
+// 單項的頁面要fetch多筆，藝人可能參與多個活動
 
-router.get('/:actid', async (req, res) => {
-  const actid = +req.params.actid || 0 // 轉換為數字
-  if (!actid) {
+router.get('/:artid', async (req, res) => {
+  const artid = req.params.artid || 0 // spotify_id 是字串
+  if (!artid) {
     return res.json({ success: false, error: '沒有編號' })
   }
   const t_sql = `
-  SELECT actid, class, actname, eaid, event_id, event_artists.artist_id, id, art_name, photo 
-  FROM \`activity\` 
-  JOIN \`event_artists\` ON activity.actid = event_artists.event_id 
-  JOIN \`artist\` ON event_artists.artist_id = artist.id 
-  WHERE actid=${actid} 
-  ORDER BY actdate 
+  SELECT e.actid, e.actname, e.actdate, e.picinfrontend, ea.eaid, ea.event_id, ea.artist_id, a.id, a.art_name, a.photo, a.photoname, a.spotify_id 
+  FROM \`activity\` as e
+  JOIN \`event_artists\` as ea ON e.actid = ea.event_id 
+  JOIN \`artist\` as a ON ea.artist_id = a.id 
+  WHERE a.spotify_id="${artid}" 
+  ORDER BY e.actdate 
   ASC`
   const [rows2] = await db.query(t_sql)
+
+  rows2.forEach((el) => {
+    const m = moment(el.actdate)
+    // 無效的日期格式，使用空字串
+    el.actdate = m.isValid() ? m.format(dateFormat) : ''
+  })
+
   if (!rows2.length) {
     // 沒有該筆資料
     return res.json({ success: false, error: '沒有該筆資料' })
