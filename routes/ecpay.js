@@ -28,7 +28,6 @@ function generateRandomString(length) {
 }
 
 function CheckMacValueGen(parameters, algorithm, digest) {
-  // const crypto = require('crypto')
   let Step0
 
   Step0 = Object.entries(parameters)
@@ -81,12 +80,12 @@ router.post('/', authenticate, async (req, res) => {
         .json({ status: 'error', message: '選擇的座位詳細信息缺失' })
     }
 
-    const orderNum = generateRandomString(7)
+    const MerchantTradeNo = generateRandomString(7)
     const packageId = uuidv4()
 
     // 要傳送給 ECPay 的訂單資訊
     const order = {
-      id: orderNum,
+      id: MerchantTradeNo,
       currency: 'TWD',
       amount,
       packages: [
@@ -110,7 +109,7 @@ router.post('/', authenticate, async (req, res) => {
 
     // 從資料庫獲取訂單記錄
     const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
-      orderNum,
+      MerchantTradeNo,
     ])
     const orderRecord = rows[0]
 
@@ -123,7 +122,7 @@ router.post('/', authenticate, async (req, res) => {
     // 獲取選擇座位的詳細信息
     const [seatDetailsRows] = await db.query(
       'SELECT * FROM ticket WHERE order_num = ?',
-      [orderNum]
+      [MerchantTradeNo]
     )
     const seatDetails = seatDetailsRows.map((seat) => ({
       name: `${seat.seat_area} 區 ${seat.seat_row} 排 ${seat.seat_number} 號`,
@@ -138,27 +137,9 @@ router.post('/', authenticate, async (req, res) => {
     const ItemName = `訂單編號: ${orderRecord.order_num}、${itemNames}`
     const ChoosePayment = 'ALL'
     const ReturnURL = `http://localhost:3000/ticket/concert/finish/${actid}`
-    const OrderResultURL = `http://localhost:3000/ticket/concert/finish/${actid}`
+    const OrderResultURL = 'http://localhost:3005/api/ecpay/callback'
 
     // 計算 CheckMacValue
-    const MerchantTradeNo = `od${new Date().getFullYear()}${(
-      new Date().getMonth() + 1
-    )
-      .toString()
-      .padStart(2, '0')}${new Date()
-      .getDate()
-      .toString()
-      .padStart(2, '0')}${new Date()
-      .getHours()
-      .toString()
-      .padStart(2, '0')}${new Date()
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}${new Date()
-      .getSeconds()
-      .toString()
-      .padStart(2, '0')}${new Date().getMilliseconds().toString().padStart(2)}`
-
     const MerchantTradeDate = new Date()
       .toISOString()
       .replace('T', ' ')
@@ -215,48 +196,75 @@ router.post('/', authenticate, async (req, res) => {
   }
 })
 
-// 添加 ECPay 回調處理的路由
-// router.post('/callback', async (req, res) => {
-//   try {
-//     const { MerchantTradeNo, RtnCode, OrderResultURL } = req.body
+router.post('/callback', async (req, res) => {
+  try {
+    const { MerchantTradeNo, RtnCode, PaymentType, TradeDate } = req.body
 
-//     // 根據 MerchantTradeNo 獲取訂單資料
-//     const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
-//       MerchantTradeNo,
-//     ])
-//     const orderRecord = rows[0]
+    // 根據 MerchantTradeNo 獲取訂單資料
+    const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
+      MerchantTradeNo,
+    ])
+    const orderRecord = rows[0]
 
-//     if (!orderRecord) {
-//       return res
-//         .status(404)
-//         .json({ status: 'error', message: '訂單資料未找到' })
-//     }
+    if (!orderRecord) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: '訂單資料未找到' })
+    }
 
-//     // 判斷付款結果
-//     let status, payment, created_at
-//     if (RtnCode === '1') {
-//       // ECPay 的回調狀態碼 1 代表付款成功
-//       status = '已付款'
-//       payment = '信用卡'
-//       created_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
-//     } else {
-//       status = '付款失敗'
-//       payment = null
-//       created_at = null
-//     }
+    // 判斷付款結果
+    let status, payment, created_at
+    if (RtnCode === '1') {
+      status = '已付款'
+      created_at = TradeDate.slice(0, 19).replace('T', ' ')
+    } else {
+      status = '付款失敗'
+      payment = null
+      created_at = null
+    }
 
-//     // 更新資料表
-//     await db.query(
-//       'UPDATE ticket SET payment = ?, created_at = ?, status = ? WHERE order_num = ?',
-//       [payment, created_at, status, MerchantTradeNo]
-//     )
+    // 判斷付款方式並設置 payment 欄位
+    switch (PaymentType) {
+      case 'Credit':
+        payment = '信用卡付款'
+        break
+      case 'WebATM':
+        payment = '網路 ATM'
+        break
+      case 'ATM':
+        payment = 'ATM 轉帳'
+        break
+      case 'CVS':
+        payment = '超商代碼'
+        break
+      case 'BarCode':
+        payment = '手機條碼支付'
+        break
+      case 'EasyCard':
+        payment = '悠遊卡支付'
+        break
+      case 'LINEPay':
+        payment = 'LINE Pay'
+        break
+      default:
+        payment = '其他付款方式'
+    }
 
-//     // 重定向到完成頁面
-//     res.redirect(OrderResultURL)
-//   } catch (error) {
-//     console.error('處理付款回調時出錯:', error)
-//     res.status(500).json({ status: 'error', message: '處理付款回調時發生錯誤' })
-//   }
-// })
+    // 更新資料表
+    await db.query(
+      'UPDATE ticket SET payment = ?, created_at = ?, status = ? WHERE order_num = ?',
+      [payment, created_at, status, MerchantTradeNo]
+    )
+
+    // 獲取 actid
+    const actid = orderRecord.activity_id
+
+    // 跳轉回結果頁面
+    res.redirect(`http://localhost:3000/ticket/concert/finish/${actid}`)
+  } catch (error) {
+    console.error('處理回調時出錯:', error)
+    res.status(500).json({ status: 'error', message: '處理回調時發生錯誤' })
+  }
+})
 
 export default router
