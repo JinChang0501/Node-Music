@@ -27,9 +27,13 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, callback) {
     // 經授權後，req.user帶有會員的id
-    const newFilename = req.user.id
-    // 新檔名由表單傳來的req.body.newFilename決定
-    callback(null, newFilename + path.extname(file.originalname))
+    const userId = req.user.id
+    console.log(`我是${JSON.stringify(file)}`)
+    const originalFilename = file.originalname
+    console.log(`我是${originalFilename}`)
+    const uniqueSuffix = userId + '-' + Date.now()
+    const newFilename = uniqueSuffix + path.extname(originalFilename)
+    callback(null, newFilename)
   },
 })
 const upload = multer({ storage: storage })
