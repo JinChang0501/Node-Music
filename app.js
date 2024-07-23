@@ -80,7 +80,6 @@ app.use(
 )
 
 // 跟著spotify 專案做 chatgpt.ver
-
 app.get('/login', (req, res) => {
   const scope = 'streaming user-read-email user-read-private'
   const authUrl =
@@ -114,8 +113,10 @@ app.get('/callback', async (req, res) => {
     )
 
     const { access_token, refresh_token } = response.data
+    // 重定向到前端，並附帶 token
     res.redirect(
-      `/success?access_token=${access_token}&refresh_token=${refresh_token}`
+      `http://localhost:3000/success?access_token=${access_token}&refresh_token=${refresh_token}`
+      // `/success?access_token=${access_token}&refresh_token=${refresh_token}`
     )
   } catch (error) {
     res.send(error)
