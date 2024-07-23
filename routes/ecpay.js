@@ -138,7 +138,7 @@ router.post('/', authenticate, async (req, res) => {
     const ItemName = `訂單編號: ${orderRecord.order_num}、${itemNames}`
     const ChoosePayment = 'ALL'
     const ReturnURL = `http://localhost:3000/ticket/concert/finish/${actid}`
-    const OrderResultURL = 'http://localhost:3005/api/ecpay/callback'
+    const OrderResultURL = `http://localhost:3000/ticket/concert/finish/${actid}`
 
     // 計算 CheckMacValue
     const MerchantTradeNo = `od${new Date().getFullYear()}${(
@@ -216,47 +216,47 @@ router.post('/', authenticate, async (req, res) => {
 })
 
 // 添加 ECPay 回調處理的路由
-router.post('/callback', async (req, res) => {
-  try {
-    const { MerchantTradeNo, RtnCode, OrderResultURL } = req.body
+// router.post('/callback', async (req, res) => {
+//   try {
+//     const { MerchantTradeNo, RtnCode, OrderResultURL } = req.body
 
-    // 根據 MerchantTradeNo 獲取訂單資料
-    const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
-      MerchantTradeNo,
-    ])
-    const orderRecord = rows[0]
+//     // 根據 MerchantTradeNo 獲取訂單資料
+//     const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
+//       MerchantTradeNo,
+//     ])
+//     const orderRecord = rows[0]
 
-    if (!orderRecord) {
-      return res
-        .status(404)
-        .json({ status: 'error', message: '訂單資料未找到' })
-    }
+//     if (!orderRecord) {
+//       return res
+//         .status(404)
+//         .json({ status: 'error', message: '訂單資料未找到' })
+//     }
 
-    // 判斷付款結果
-    let status, payment, created_at
-    if (RtnCode === '1') {
-      // ECPay 的回調狀態碼 1 代表付款成功
-      status = '已付款'
-      payment = '信用卡'
-      created_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
-    } else {
-      status = '付款失敗'
-      payment = null
-      created_at = null
-    }
+//     // 判斷付款結果
+//     let status, payment, created_at
+//     if (RtnCode === '1') {
+//       // ECPay 的回調狀態碼 1 代表付款成功
+//       status = '已付款'
+//       payment = '信用卡'
+//       created_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
+//     } else {
+//       status = '付款失敗'
+//       payment = null
+//       created_at = null
+//     }
 
-    // 更新資料表
-    await db.query(
-      'UPDATE ticket SET payment = ?, created_at = ?, status = ? WHERE order_num = ?',
-      [payment, created_at, status, MerchantTradeNo]
-    )
+//     // 更新資料表
+//     await db.query(
+//       'UPDATE ticket SET payment = ?, created_at = ?, status = ? WHERE order_num = ?',
+//       [payment, created_at, status, MerchantTradeNo]
+//     )
 
-    // 重定向到完成頁面
-    res.redirect(OrderResultURL)
-  } catch (error) {
-    console.error('處理付款回調時出錯:', error)
-    res.status(500).json({ status: 'error', message: '處理付款回調時發生錯誤' })
-  }
-})
+//     // 重定向到完成頁面
+//     res.redirect(OrderResultURL)
+//   } catch (error) {
+//     console.error('處理付款回調時出錯:', error)
+//     res.status(500).json({ status: 'error', message: '處理付款回調時發生錯誤' })
+//   }
+// })
 
 export default router
