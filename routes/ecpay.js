@@ -260,10 +260,32 @@ router.post('/callback', async (req, res) => {
     const actid = orderRecord.activity_id
 
     // 跳轉回結果頁面
-    res.redirect(`http://localhost:3000/ticket/concert/finish/${actid}`)
+    const redirectUrl = `http://localhost:3000/ticket/concert/finish/${actid}?order_num=${MerchantTradeNo}`
+    res.redirect(redirectUrl)
   } catch (error) {
     console.error('處理回調時出錯:', error)
     res.status(500).json({ status: 'error', message: '處理回調時發生錯誤' })
+  }
+})
+
+router.get('/order/:order_num', async (req, res) => {
+  try {
+    const { order_num } = req.params
+    const [rows] = await db.query('SELECT * FROM ticket WHERE order_num = ?', [
+      order_num,
+    ])
+    const orderRecord = rows[0]
+
+    if (!orderRecord) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: '訂單資料未找到' })
+    }
+
+    res.json(orderRecord)
+  } catch (error) {
+    console.error('獲取訂單資料時出錯:', error)
+    res.status(500).json({ status: 'error', message: '獲取訂單資料時發生錯誤' })
   }
 })
 
