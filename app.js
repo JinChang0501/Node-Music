@@ -18,7 +18,6 @@ import querystring from 'querystring'
 const spotify_client_id = process.env.SPOTIFY_CLIENT_ID
 const spotify_client_secret = process.env.SPOTIFY_CLIENT_SECRET
 const redirect_uri = 'http://localhost:3005/callback'
-// const scopes = 'user-read-private user-read-email'
 
 // 使用檔案的session store，存在sessions資料夾
 import sessionFileStore from 'session-file-store'
@@ -85,7 +84,9 @@ app.use(
 
 // 跟著spotify 專案做 chatgpt.ver
 app.get('/login', (req, res) => {
-  const scope = 'streaming user-read-email user-read-private'
+  const scope =
+    'streaming user-read-email user-read-private  ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read'
+
   const authUrl =
     'https://accounts.spotify.com/authorize?' +
     querystring.stringify({
