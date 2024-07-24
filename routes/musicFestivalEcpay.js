@@ -10,8 +10,11 @@ const router = express.Router()
 const MerchantID = process.env.ECPAY_MERCHANT_ID // 必填
 const HashKey = process.env.ECPAY_HASH_KEY // 必填
 const HashIV = process.env.ECPAY_HASH_IV // 必填
+const isStage = process.env.ECPAY_TEST === 'true' // 測試環境： true；正式環境：false
+const stage = isStage ? '-stage' : ''
 const algorithm = 'sha256'
 const digest = 'hex'
+const APIURL = `https://payment${stage}.ecpay.com.tw/Cashier/AioCheckOut/V5`
 
 function generateRandomString(length) {
   const characters =
@@ -69,9 +72,9 @@ function CheckMacValueGen(parameters, algorithm, digest) {
 router.post('/', authenticate, async (req, res) => {
   try {
     const userId = req.user.id
-    const { selectedSeatDetails, amount, products, actid } = req.body
+    const { selectedTickets, amount, products, actid } = req.body
 
-    if (!selectedSeatDetails || selectedSeatDetails.length === 0) {
+    if (!selectedTickets || selectedTickets.length === 0) {
       return res
         .status(400)
         .json({ status: 'error', message: '選擇的座位詳細信息缺失' })
@@ -96,7 +99,7 @@ router.post('/', authenticate, async (req, res) => {
     }
 
     // 設置資料庫更新操作
-    const updatePromises = selectedSeatDetails.map((seat) => {
+    const updatePromises = selectedTickets.map((seat) => {
       return db.query(
         'UPDATE ticket SET member_id = ?, order_num = ?, amount = ?, order_info = ? WHERE tid = ?',
         [userId, order.id, amount, JSON.stringify(order), seat.tid]
@@ -117,13 +120,8 @@ router.post('/', authenticate, async (req, res) => {
     }
 
     // 獲取選擇座位的詳細信息
-    const [seatDetailsRows] = await db.query(
-      'SELECT * FROM ticket WHERE order_num = ?',
-      [MerchantTradeNo]
-    )
-    const seatDetails = seatDetailsRows.map((seat) => ({
-      name: `${seat.seat_area} 區 ${seat.seat_row} 排 ${seat.seat_number} 號`,
-      price: seat.price,
+    const seatDetails = selectedTickets.map((seat) => ({
+      name: `${seat.art_name}  ${seat.actname}`,
     }))
 
     // 組合 ItemName 字段
@@ -133,8 +131,9 @@ router.post('/', authenticate, async (req, res) => {
     const TradeDesc = '商店線上付款'
     const ItemName = `訂單編號: ${orderRecord.order_num}、${itemNames}`
     const ChoosePayment = 'ALL'
-    const ReturnURL = `http://localhost:3000/ticket/concert/finish/${actid}`
-    const OrderResultURL = 'http://localhost:3005/api/ecpay/callback'
+    const ReturnURL = `http://localhost:3000/ticket/musicFestival/finish/${actid}`
+    const OrderResultURL =
+      'http://localhost:3005/api/musicFestivalEcpay/callback'
 
     // 計算 CheckMacValue
     const MerchantTradeDate = new Date()
@@ -305,7 +304,7 @@ router.post('/callback', async (req, res) => {
     const actid = orderRecord.activity_id
 
     // 跳轉回結果頁面
-    const redirectUrl = `http://localhost:3000/ticket/concert/finish/${actid}?order_num=${MerchantTradeNo}`
+    const redirectUrl = `http://localhost:3000/ticket/musicFestival/finish/${actid}?order_num=${MerchantTradeNo}`
     res.redirect(redirectUrl)
   } catch (error) {
     console.error('處理回調時出錯:', error)
