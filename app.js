@@ -117,9 +117,10 @@ app.get('/callback', async (req, res) => {
     )
 
     const { access_token, refresh_token } = response.data
-    // 重定向到前端，並附帶 token
+    // 重定向到前端的一個特定頁面，並附帶 token
     res.redirect(
-      `http://localhost:3000/success?access_token=${access_token}&refresh_token=${refresh_token}`
+      `http://localhost:3000/auth/callback?access_token=${access_token}&refresh_token=${refresh_token}`
+      // `http://localhost:3000/success?access_token=${access_token}&refresh_token=${refresh_token}`
       // `/success?access_token=${access_token}&refresh_token=${refresh_token}`
     )
   } catch (error) {
@@ -127,10 +128,10 @@ app.get('/callback', async (req, res) => {
   }
 })
 
-app.get('/success', (req, res) => {
-  const { access_token, refresh_token } = req.query
-  res.send({ access_token, refresh_token })
-})
+// app.get('/success', (req, res) => {
+//   const { access_token, refresh_token } = req.query
+//   res.send({ access_token, refresh_token })
+// })
 
 // spotify end
 
