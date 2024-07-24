@@ -245,27 +245,28 @@ router.get('/:id', async (req, res, next) => {
 // })
 
 // 前端到後端
-// router.post("/add", async (req, res) => {
-//   //TODO:欄位資料檢查
+router.post('/', async (req, res) => {
+  //TODO:欄位資料檢查
 
-// const sql = "INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `created_at`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`) VALUES (?,?,?,?,?,?,NOW(),?,?,?,?,?,?);"
+  const sql =
+    'INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NOW());'
 
-// //第一個值是sql，第二個值是陣列
-// const [ result ] = await db.query(sql, [
-//   req.body.order_num,
-//   req.body.member_id,
-//   req.body.product_id,
-//   req.body.quantity,
-//   req.body.payment_method,
-//   req.body.pickup_method,
-//   req.body.TempVar,
-//   req.body.outside,
-//   req.body.ship,
-//   req.body.storeid,
-//   req.body.storename,
-//   req.body.storeaddress,
-
-// ]);
-// res.json(result);
+  //第一個值是sql，第二個值是陣列
+  const [result] = await db.query(sql, [
+    req.body.order_num,
+    req.body.member_id,
+    req.body.product_id,
+    req.body.quantity,
+    req.body.payment_method,
+    req.body.pickup_method,
+    req.body.TempVar,
+    req.body.outside,
+    req.body.ship,
+    req.body.storeid,
+    req.body.storename,
+    req.body.storeaddress,
+  ])
+  res.json(result)
+})
 
 export default router
