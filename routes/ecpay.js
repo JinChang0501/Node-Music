@@ -205,13 +205,13 @@ router.post('/callback', async (req, res) => {
         payment = '圓夢彈性分期'
         break
       case 'TWQR_OPAY':
-        payment = '歐付寶TWQR 行動支付'
+        payment = '歐付寶行動支付'
         break
       case 'BNPL_URICH':
         payment = '裕富數位無卡分期'
         break
       case 'WebATM_TAISHIN':
-        payment = '台新銀行WebATM'
+        payment = 'WebATM (台新)'
         break
       case 'WebATM_ESUN':
         payment = '玉山銀行WebATM'
@@ -235,7 +235,7 @@ router.post('/callback', async (req, res) => {
         payment = '兆豐銀行WebATM'
         break
       case 'WebATM_LAND':
-        payment = '土地銀行WebATM'
+        payment = 'WebATM (土地)'
         break
       case 'WebATM_TACHONG':
         payment = '大眾銀行WebATM'

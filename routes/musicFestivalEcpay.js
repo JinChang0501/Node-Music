@@ -10,11 +10,8 @@ const router = express.Router()
 const MerchantID = process.env.ECPAY_MERCHANT_ID // 必填
 const HashKey = process.env.ECPAY_HASH_KEY // 必填
 const HashIV = process.env.ECPAY_HASH_IV // 必填
-const isStage = process.env.ECPAY_TEST === 'true' // 測試環境： true；正式環境：false
-const stage = isStage ? '-stage' : ''
 const algorithm = 'sha256'
 const digest = 'hex'
-const APIURL = `https://payment${stage}.ecpay.com.tw/Cashier/AioCheckOut/V5`
 
 function generateRandomString(length) {
   const characters =
@@ -204,13 +201,13 @@ router.post('/callback', async (req, res) => {
         payment = '圓夢彈性分期'
         break
       case 'TWQR_OPAY':
-        payment = '歐付寶TWQR 行動支付'
+        payment = '歐付寶行動支付'
         break
       case 'BNPL_URICH':
         payment = '裕富數位無卡分期'
         break
       case 'WebATM_TAISHIN':
-        payment = '台新銀行WebATM'
+        payment = 'WebATM (台新)'
         break
       case 'WebATM_ESUN':
         payment = '玉山銀行WebATM'
@@ -234,7 +231,7 @@ router.post('/callback', async (req, res) => {
         payment = '兆豐銀行WebATM'
         break
       case 'WebATM_LAND':
-        payment = '土地銀行WebATM'
+        payment = 'WebATM (土地)'
         break
       case 'WebATM_TACHONG':
         payment = '大眾銀行WebATM'
