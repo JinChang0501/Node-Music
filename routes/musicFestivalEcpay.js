@@ -4,14 +4,52 @@ import authenticate from '#middlewares/authenticate.js'
 import { v4 as uuidv4 } from 'uuid'
 import db from '../utils/connect-mysql.js'
 import crypto from 'crypto'
+import nodemailer from 'nodemailer'
 
 const router = express.Router()
 
-const MerchantID = process.env.ECPAY_MERCHANT_ID // 必填
-const HashKey = process.env.ECPAY_HASH_KEY // 必填
-const HashIV = process.env.ECPAY_HASH_IV // 必填
+const MerchantID = process.env.ECPAY_MERCHANT_ID
+const HashKey = process.env.ECPAY_HASH_KEY
+const HashIV = process.env.ECPAY_HASH_IV
 const algorithm = 'sha256'
 const digest = 'hex'
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.SMTP_TO_EMAIL,
+    pass: process.env.SMTP_TO_PASSWORD,
+  },
+})
+
+function formatDate(dateString, timeString) {
+  const date = new Date(dateString)
+  const [year, month, day] = [
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  ]
+  const [hours, minutes, seconds] = timeString.split(':')
+
+  const formattedMonth = month.toString().padStart(2, '0')
+  const formattedDay = day.toString().padStart(2, '0')
+  const formattedHours = hours.padStart(2, '0')
+  const formattedMinutes = minutes.padStart(2, '0')
+  const formattedSeconds = seconds.padStart(2, '0')
+
+  return `${year}/${formattedMonth}/${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+}
+
+function formatDateTime(dateTimeString) {
+  const date = new Date(dateTimeString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+}
 
 function generateRandomString(length) {
   const characters =
@@ -330,4 +368,68 @@ router.get('/order/:order_num', async (req, res) => {
   }
 })
 
+router.post('/send-email', async (req, res) => {
+  const { order_num, email } = req.body
+
+  if (!order_num || !email) {
+    return res
+      .status(400)
+      .json({ status: 'error', message: '訂單號或電子郵件地址缺失' })
+  }
+
+  try {
+    // 獲取訂單資料及相關信息
+    const [rows] = await db.query(
+      `
+      SELECT t.*, a.actname, a.actdate, a.acttime, a.location, a.picture, ar.art_name, m.name as member_name, m.email as member_email
+      FROM ticket t
+      JOIN activity a ON t.activity_id = a.actid
+      LEFT JOIN artist ar ON a.artist_id = ar.id
+      LEFT JOIN member m ON t.member_id = m.id
+      WHERE t.order_num = ?
+    `,
+      [order_num]
+    )
+    const orderRecord = rows[0]
+
+    if (!orderRecord) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: '訂單資料未找到' })
+    }
+
+    const formattedDateTime = formatDate(
+      orderRecord.actdate,
+      orderRecord.acttime
+    )
+
+    const formattedPaymentTime = formatDateTime(orderRecord.created_at)
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: `MaK'in 製噪`,
+      html: `
+        <img src="${orderRecord.picture}" alt="活動圖片" />
+        <h1>${orderRecord.actname}</h1>
+        <h2>${orderRecord.art_name}</h2>
+        <h2>總價 : $ ${orderRecord.amount}</h2>
+        <h3>活動地點: ${orderRecord.location}</h3>
+        <h3>活動日期: ${formattedDateTime}</h3>
+        <h4>訂單狀態: ${orderRecord.status}</h4>
+        <h4>付款方式: ${orderRecord.payment}</h4>
+        <h4>付款時間: ${formattedPaymentTime}</h4>
+        <p>更多詳情: <a href="http://localhost:3000/member/ticket-detail/${order_num}">點此查看訂單</a></p>
+      `,
+    }
+
+    // 發送郵件
+    await transporter.sendMail(mailOptions)
+
+    res.json({ status: 'success', message: '郵件已發送' })
+  } catch (error) {
+    console.error('發送郵件時出錯:', error)
+    res.status(500).json({ status: 'error', message: '發送郵件時發生錯誤' })
+  }
+})
 export default router
