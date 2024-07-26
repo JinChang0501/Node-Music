@@ -8,16 +8,16 @@ import nodemailer from 'nodemailer'
 
 const router = express.Router()
 
-const MerchantID = process.env.ECPAY_MERCHANT_ID // 必填
-const HashKey = process.env.ECPAY_HASH_KEY // 必填
-const HashIV = process.env.ECPAY_HASH_IV // 必填
+const MerchantID = process.env.ECPAY_MERCHANT_ID
+const HashKey = process.env.ECPAY_HASH_KEY
+const HashIV = process.env.ECPAY_HASH_IV
 const algorithm = 'sha256'
 const digest = 'hex'
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.SMTP_TO_EMAIL, // 用你的 Gmail 地址
-    pass: process.env.SMTP_TO_PASSWORD, // 用你的 Gmail 密碼
+    user: process.env.SMTP_TO_EMAIL,
+    pass: process.env.SMTP_TO_PASSWORD,
   },
 })
 
@@ -30,21 +30,19 @@ function formatDate(dateString, timeString) {
   ]
   const [hours, minutes, seconds] = timeString.split(':')
 
-  // 將月份、日期、時間、分鐘、秒鐘格式化為兩位數
   const formattedMonth = month.toString().padStart(2, '0')
   const formattedDay = day.toString().padStart(2, '0')
   const formattedHours = hours.padStart(2, '0')
   const formattedMinutes = minutes.padStart(2, '0')
   const formattedSeconds = seconds.padStart(2, '0')
 
-  // 返回格式化的日期時間字符串
   return `${year}/${formattedMonth}/${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`
 }
 
 function formatDateTime(dateTimeString) {
   const date = new Date(dateTimeString)
   const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0') // 月份從0開始
+  const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
   const hours = String(date.getHours()).padStart(2, '0')
   const minutes = String(date.getMinutes()).padStart(2, '0')
@@ -396,7 +394,6 @@ router.post('/send-email', async (req, res) => {
     `,
       [order_num]
     )
-
     const orderRecord = rows[0]
 
     if (!orderRecord) {
@@ -412,7 +409,12 @@ router.post('/send-email', async (req, res) => {
 
     const formattedPaymentTime = formatDateTime(orderRecord.created_at)
 
-    // 組合郵件內容
+    const seatDetails = rows.map((seat) => ({
+      name: `${seat.seat_area} 區 ${seat.seat_row} 排 ${seat.seat_number} 號`,
+    }))
+
+    const itemNames = seatDetails.map((seat) => `[ ${seat.name} ]`).join('、')
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -421,6 +423,8 @@ router.post('/send-email', async (req, res) => {
         <img src="${orderRecord.picture}" alt="活動圖片" />
         <h1>${orderRecord.actname}</h1>
         <h2>${orderRecord.art_name}</h2>
+        <h2>座位 : ${itemNames}</h2>
+        <h2>總價 : $ ${orderRecord.amount}</h2>
         <h3>活動地點: ${orderRecord.location}</h3>
         <h3>活動日期: ${formattedDateTime}</h3>
         <h4>訂單狀態: ${orderRecord.status}</h4>
