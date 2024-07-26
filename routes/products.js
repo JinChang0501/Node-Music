@@ -1,5 +1,6 @@
 import express from 'express'
 const router = express.Router()
+import authenticate from '#middlewares/authenticate.js'
 
 // 檢查空物件, 轉換req.params為數字
 import { getIdParam } from '#db-helpers/db-tool.js'
@@ -98,14 +99,14 @@ router.get('/', async (req, res) => {
 
   // // 避免sql查詢錯誤導致後端當掉，使用try/catch語句
   // try {
-    // const { count, rows } = await Product.findAndCountAll({
-    //   where: { [Op.and]: conditions },
-    //   raw: true, // 只需要資料表中資料,
-    //   // logging: (msg) => console.log(msg.bgWhite),
-    //   offset,
-    //   limit,
-    //   order,
-    // })
+  // const { count, rows } = await Product.findAndCountAll({
+  //   where: { [Op.and]: conditions },
+  //   raw: true, // 只需要資料表中資料,
+  //   // logging: (msg) => console.log(msg.bgWhite),
+  //   offset,
+  //   limit,
+  //   order,
+  // })
 
   //   if (req.query.raw === 'true') {
   //     return res.json(rows)
@@ -245,16 +246,34 @@ router.get('/:id', async (req, res, next) => {
 // })
 
 // 前端到後端
-router.post('/', async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   //TODO:欄位資料檢查
+  const id = +req.user.id
+
+  function generateRandomString() {
+    const length = 7
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    let result = ''
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length)
+      result += characters.charAt(randomIndex)
+    }
+
+    return result
+  }
+
+  // 示例用法
+  const randomString = generateRandomString()
 
   const sql =
     'INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NOW());'
 
   //第一個值是sql，第二個值是陣列
   const [result] = await db.query(sql, [
-    req.body.order_num,
-    req.body.member_id,
+    randomString,
+    id,
     req.body.product_id,
     req.body.quantity,
     req.body.payment_method,
