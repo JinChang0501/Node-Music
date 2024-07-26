@@ -114,12 +114,19 @@ router.post('/post', authenticate, async (req, res) => {
       ])
     })
 
-    await Promise.all(insertPromises)
+    const results = await Promise.all(insertPromises)
 
-    res.json({ status: 'success', message: 'Order details added successfully' })
+    return res.json({
+      status: 'success',
+      message: 'Order details added successfully',
+      data: { results },
+    })
   } catch (error) {
     console.error('Database query error:', error)
-    res.status(500).json({ status: 'error', message: 'Database query error' })
+    res.status(500).json({
+      status: 'error',
+      message: 'Database query error',
+    })
   }
 })
 export default router
