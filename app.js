@@ -85,7 +85,7 @@ app.use(
 // 跟著spotify 專案做 chatgpt.ver
 app.get('/login', (req, res) => {
   const scope =
-    'streaming user-read-email user-read-private  ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read'
+    'streaming user-read-email user-read-private ugc-image-upload user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public user-follow-modify user-follow-read user-read-playback-position user-top-read user-read-recently-played user-library-modify user-library-read'
 
   const authUrl =
     'https://accounts.spotify.com/authorize?' +
