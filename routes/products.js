@@ -98,7 +98,7 @@ router.post('/post', authenticate, async (req, res) => {
         'INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NOW());'
 
       // 执行数据库操作
-      await db.query(sql, [
+      const [result] = await db.query(sql, [
         randomString,
         idm,
         product_id,
@@ -112,13 +112,16 @@ router.post('/post', authenticate, async (req, res) => {
         store711.storename,
         store711.storeaddress,
       ])
+      return {
+        randomString, // 获取插入记录的 ID
+      }
     })
 
     const results = await Promise.all(insertPromises)
 
     return res.json({
       status: 'success',
-      message: 'Order details added successfully',
+      message: '訂單寫入成功',
       data: { results },
     })
   } catch (error) {
