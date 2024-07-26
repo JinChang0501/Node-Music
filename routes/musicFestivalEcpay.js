@@ -410,16 +410,65 @@ router.post('/send-email', async (req, res) => {
       to: email,
       subject: `MaK'in 製噪`,
       html: `
-        <img src="${orderRecord.picture}" alt="活動圖片" />
-        <h1>${orderRecord.actname}</h1>
-        <h2>${orderRecord.art_name}</h2>
-        <h2>總價 : $ ${orderRecord.amount}</h2>
-        <h3>活動地點: ${orderRecord.location}</h3>
-        <h3>活動日期: ${formattedDateTime}</h3>
-        <h4>訂單狀態: ${orderRecord.status}</h4>
-        <h4>付款方式: ${orderRecord.payment}</h4>
-        <h4>付款時間: ${formattedPaymentTime}</h4>
-        <p>更多詳情: <a href="http://localhost:3000/member/ticket-detail/${order_num}">點此查看訂單</a></p>
+        <div style="font-family: Arial, sans-serif; width: 100%; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="text-align: center; padding-bottom: 20px;">
+                <a href="http://localhost:3000/" style="display: inline-block;">
+                  <img src="https://i.postimg.cc/zX9tnq1L/makin-Logo-1.png" alt="MaK'in Logo" style="width: 150px; height: auto; border-radius: 8px;" />
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align: center; padding-bottom: 20px;">
+                <img src="${orderRecord.picture}" alt="活動圖片" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px;" />
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+                <h1 style="font-size: 24px; color: #333; margin: 0 0 10px;">${orderRecord.actname}</h1>
+                <h2 style="font-size: 20px; color: #555; margin: 0;">${orderRecord.art_name}</h2>
+                <table style="width: 100%; margin-top: 20px; border-collapse: collapse;">
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">訂單標號:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderRecord.order_num}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">票數:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${rows.length} 張</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">總價:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">$ ${orderRecord.amount}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">活動地點:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderRecord.location}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">活動日期:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formattedDateTime}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">訂單狀態:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderRecord.status}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">付款方式:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${orderRecord.payment}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px; width: 20%; border-bottom: 1px solid #ddd; font-weight: bold;">付款時間:</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formattedPaymentTime}</td>
+                  </tr>
+                </table>
+                <p style="margin-top: 20px; font-size: 14px; color: #555;">
+                  更多詳情: <a href="http://localhost:3000/member/ticket-detail/${order_num}" style="color: #007bff;">點此查看訂單</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </div>
       `,
     }
 
