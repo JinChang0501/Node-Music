@@ -21,6 +21,38 @@ const transporter = nodemailer.createTransport({
   },
 })
 
+function formatDate(dateString, timeString) {
+  const date = new Date(dateString)
+  const [year, month, day] = [
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+  ]
+  const [hours, minutes, seconds] = timeString.split(':')
+
+  // 將月份、日期、時間、分鐘、秒鐘格式化為兩位數
+  const formattedMonth = month.toString().padStart(2, '0')
+  const formattedDay = day.toString().padStart(2, '0')
+  const formattedHours = hours.padStart(2, '0')
+  const formattedMinutes = minutes.padStart(2, '0')
+  const formattedSeconds = seconds.padStart(2, '0')
+
+  // 返回格式化的日期時間字符串
+  return `${year}/${formattedMonth}/${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+}
+
+function formatDateTime(dateTimeString) {
+  const date = new Date(dateTimeString)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0') // 月份從0開始
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+}
+
 function generateRandomString(length) {
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -373,22 +405,27 @@ router.post('/send-email', async (req, res) => {
         .json({ status: 'error', message: '訂單資料未找到' })
     }
 
+    const formattedDateTime = formatDate(
+      orderRecord.actdate,
+      orderRecord.acttime
+    )
+
+    const formattedPaymentTime = formatDateTime(orderRecord.created_at)
+
     // 組合郵件內容
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
       subject: `MaK'in 製噪`,
       html: `
+        <img src="${orderRecord.picture}" alt="活動圖片" />
         <h1>${orderRecord.actname}</h1>
         <h2>${orderRecord.art_name}</h2>
-        <h3>活動日期: ${orderRecord.actdate}  ${orderRecord.acttime}</h3>
+        <h3>活動地點: ${orderRecord.location}</h3>
+        <h3>活動日期: ${formattedDateTime}</h3>
         <h4>訂單狀態: ${orderRecord.status}</h4>
-        <h4>付款方式: ${orderRecord.h4ayment}</h4>
-        <h4>付款時間: ${orderRecord.created_at}</h4>
-        <h4>活動地點: ${orderRecord.location}</h4>
-        <p>活動圖片: <img src="${orderRecord.picture}" alt="活動圖片" /></p>
-        <p>會員名稱: ${orderRecord.member_name}</p>
-        <p>會員郵件: ${orderRecord.member_email}</p>
+        <h4>付款方式: ${orderRecord.payment}</h4>
+        <h4>付款時間: ${formattedPaymentTime}</h4>
         <p>更多詳情: <a href="http://localhost:3000/member/ticket-detail/${order_num}">點此查看訂單</a></p>
       `,
     }
