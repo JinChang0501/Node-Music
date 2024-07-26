@@ -16,24 +16,55 @@ router.get('/', authenticate, async function (req, res) {
 
   const sql = `SELECT 
     a.order_num,
-    MIN(b.picture) AS firstProductPicture,
-    MIN(b.name) AS firstProductName,
-    sum(a.quantity) AS totalCount,
-    sum(b.price) AS totalPrice,
+    b_min.picture AS firstProductPicture,
+    b_min.name AS firstProductName,
+    total_stats.totalCount,
+    total_stats.totalPrice,
     a.created_at
 FROM 
-    order_detail as a 
+    (SELECT 
+         order_num,
+         SUM(quantity) AS totalCount,
+         SUM(quantity * price) AS totalPrice
+     FROM 
+         order_detail AS a
+     JOIN 
+         product AS b
+     ON 
+         a.product_id = b.id
+     WHERE 
+         a.member_id = ${id}
+     GROUP BY 
+         order_num) AS total_stats
 JOIN 
-    product as b 
+    (SELECT 
+         order_num, 
+         MIN(product_id) AS min_product_id 
+     FROM 
+         order_detail 
+     WHERE 
+         member_id = ${id}
+     GROUP BY 
+         order_num) AS min_products
 ON 
-    a.product_id = b.id 
+    total_stats.order_num = min_products.order_num
+JOIN 
+    product AS b_min
+ON 
+    min_products.min_product_id = b_min.id
+JOIN 
+    order_detail AS a
+ON 
+    total_stats.order_num = a.order_num
 WHERE 
     a.member_id = ${id}
 GROUP BY 
-    a.order_num, a.created_at
-Order by a.created_at Desc;`
+    a.order_num, a.created_at, b_min.picture, b_min.name, total_stats.totalCount, total_stats.totalPrice
+ORDER BY 
+    a.created_at DESC;`
 
   const [result] = await db.query(sql)
+
   // res.json({ result })
   return res.json({ status: 'success', data: { result } })
   // 處理如果沒找到資料
@@ -50,23 +81,53 @@ router.get('/:sortBy', authenticate, async function (req, res) {
     sort = `a.created_at asc`
   }
   const sql = `SELECT 
-      a.order_num,
-      MIN(b.picture) AS firstProductPicture,
-      MIN(b.name) AS firstProductName,
-      COUNT(a.id) AS totalCount,
-      sum(a.quantity * b.price) AS totalPrice,
-      a.created_at
-  FROM 
-      order_detail AS a 
-  JOIN 
-      product AS b 
-  ON 
-      a.product_id = b.id 
-  WHERE 
-      ${where}
-  GROUP BY 
-      a.order_num, a.created_at
-  Order by ${sort};`
+    a.order_num,
+    b_min.picture AS firstProductPicture,
+    b_min.name AS firstProductName,
+    total_stats.totalCount,
+    total_stats.totalPrice,
+    a.created_at
+FROM 
+    (SELECT 
+         order_num,
+         SUM(quantity) AS totalCount,
+         SUM(quantity * price) AS totalPrice
+     FROM 
+         order_detail AS a
+     JOIN 
+         product AS b
+     ON 
+         a.product_id = b.id
+     WHERE 
+         a.member_id = ${id}
+     GROUP BY 
+         order_num) AS total_stats
+JOIN 
+    (SELECT 
+         order_num, 
+         MIN(product_id) AS min_product_id 
+     FROM 
+         order_detail 
+     WHERE 
+         member_id = ${id}
+     GROUP BY 
+         order_num) AS min_products
+ON 
+    total_stats.order_num = min_products.order_num
+JOIN 
+    product AS b_min
+ON 
+    min_products.min_product_id = b_min.id
+JOIN 
+    order_detail AS a
+ON 
+    total_stats.order_num = a.order_num
+WHERE 
+    a.member_id = ${id}
+GROUP BY 
+    a.order_num, a.created_at, b_min.picture, b_min.name, total_stats.totalCount, total_stats.totalPrice
+ORDER BY 
+    ${sort};`
 
   const [result] = await db.query(sql)
   // res.json({ result })
