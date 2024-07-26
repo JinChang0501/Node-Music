@@ -54,7 +54,7 @@ router.get('/:sortBy', authenticate, async function (req, res) {
       MIN(b.picture) AS firstProductPicture,
       MIN(b.name) AS firstProductName,
       COUNT(a.id) AS totalCount,
-      sum(b.price) AS totalPrice,
+      sum(a.quantity * b.price) AS totalPrice,
       a.created_at
   FROM 
       order_detail AS a 
