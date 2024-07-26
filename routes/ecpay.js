@@ -4,6 +4,7 @@ import authenticate from '#middlewares/authenticate.js'
 import { v4 as uuidv4 } from 'uuid'
 import db from '../utils/connect-mysql.js'
 import crypto from 'crypto'
+import nodemailer from 'nodemailer'
 
 const router = express.Router()
 
@@ -12,6 +13,13 @@ const HashKey = process.env.ECPAY_HASH_KEY // 必填
 const HashIV = process.env.ECPAY_HASH_IV // 必填
 const algorithm = 'sha256'
 const digest = 'hex'
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.SMTP_TO_EMAIL, // 用你的 Gmail 地址
+    pass: process.env.SMTP_TO_PASSWORD, // 用你的 Gmail 密碼
+  },
+})
 
 function generateRandomString(length) {
   const characters =
@@ -331,6 +339,67 @@ router.get('/order/:order_num', async (req, res) => {
   } catch (error) {
     console.error('獲取訂單資料時出錯:', error)
     res.status(500).json({ status: 'error', message: '獲取訂單資料時發生錯誤' })
+  }
+})
+
+router.post('/send-email', async (req, res) => {
+  const { order_num, email } = req.body
+
+  if (!order_num || !email) {
+    return res
+      .status(400)
+      .json({ status: 'error', message: '訂單號或電子郵件地址缺失' })
+  }
+
+  try {
+    // 獲取訂單資料及相關信息
+    const [rows] = await db.query(
+      `
+      SELECT t.*, a.actname, a.actdate, a.acttime, a.location, a.picture, ar.art_name, m.name as member_name, m.email as member_email
+      FROM ticket t
+      JOIN activity a ON t.activity_id = a.actid
+      LEFT JOIN artist ar ON a.artist_id = ar.id
+      LEFT JOIN member m ON t.member_id = m.id
+      WHERE t.order_num = ?
+    `,
+      [order_num]
+    )
+
+    const orderRecord = rows[0]
+
+    if (!orderRecord) {
+      return res
+        .status(404)
+        .json({ status: 'error', message: '訂單資料未找到' })
+    }
+
+    // 組合郵件內容
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: `MaK'in 製噪`,
+      html: `
+        <h1>${orderRecord.actname}</h1>
+        <h2>${orderRecord.art_name}</h2>
+        <h3>活動日期: ${orderRecord.actdate}  ${orderRecord.acttime}</h3>
+        <h4>訂單狀態: ${orderRecord.status}</h4>
+        <h4>付款方式: ${orderRecord.h4ayment}</h4>
+        <h4>付款時間: ${orderRecord.created_at}</h4>
+        <h4>活動地點: ${orderRecord.location}</h4>
+        <p>活動圖片: <img src="${orderRecord.picture}" alt="活動圖片" /></p>
+        <p>會員名稱: ${orderRecord.member_name}</p>
+        <p>會員郵件: ${orderRecord.member_email}</p>
+        <p>更多詳情: <a href="http://localhost:3000/member/ticket-detail/${order_num}">點此查看訂單</a></p>
+      `,
+    }
+
+    // 發送郵件
+    await transporter.sendMail(mailOptions)
+
+    res.json({ status: 'success', message: '郵件已發送' })
+  } catch (error) {
+    console.error('發送郵件時出錯:', error)
+    res.status(500).json({ status: 'error', message: '發送郵件時發生錯誤' })
   }
 })
 
