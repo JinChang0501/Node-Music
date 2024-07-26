@@ -267,6 +267,32 @@ router.post('/', authenticate, async (req, res) => {
   // 示例用法
   const randomString = generateRandomString()
 
+  // 提取请求体中的数据
+  const {
+    storageKey1,
+    storageKey2,
+    items, // 假设 items 是一个对象，包含 product_id 等数据
+  } = req.body
+
+  // 打印 storageKey 值以供调试
+  console.log('Storage Key 1:', storageKey1)
+  console.log('Storage Key 2:', storageKey2)
+
+  // 假设 items 包含 product_id 和其他字段
+  const {
+    product_id,
+    quantity,
+    payment_method,
+    pickup_method,
+    TempVar,
+    outside,
+    ship,
+    storeid,
+    storename,
+    storeaddress,
+  } = items
+
+  for (const item of items) {
   const sql =
     'INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NOW());'
 
@@ -274,16 +300,16 @@ router.post('/', authenticate, async (req, res) => {
   const [result] = await db.query(sql, [
     randomString,
     id,
-    req.body.product_id,
-    req.body.quantity,
-    req.body.payment_method,
-    req.body.pickup_method,
-    req.body.TempVar,
-    req.body.outside,
-    req.body.ship,
-    req.body.storeid,
-    req.body.storename,
-    req.body.storeaddress,
+    product_id,
+    quantity,
+    payment_method,
+    pickup_method,
+    TempVar,
+    outside,
+    ship,
+    storeid,
+    storename,
+    storeaddress,
   ])
   res.json(result)
 })
