@@ -293,25 +293,26 @@ router.post('/', authenticate, async (req, res) => {
   } = items
 
   for (const item of items) {
-  const sql =
-    'INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NOW());'
+    const sql =
+      'INSERT INTO `order_detail`( `order_num`, `member_id`, `product_id`, `quantity`, `payment_method`, `pickup_method`, `TempVar`, `outside`, `ship`, `storeid`, `storename`, `storeaddress`, `created_at`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,NOW());'
 
-  //第一個值是sql，第二個值是陣列
-  const [result] = await db.query(sql, [
-    randomString,
-    id,
-    product_id,
-    quantity,
-    payment_method,
-    pickup_method,
-    TempVar,
-    outside,
-    ship,
-    storeid,
-    storename,
-    storeaddress,
-  ])
-  res.json(result)
+    //第一個值是sql，第二個值是陣列
+    const [result] = await db.query(sql, [
+      randomString,
+      id,
+      product_id,
+      quantity,
+      payment_method,
+      pickup_method,
+      TempVar,
+      outside,
+      ship,
+      storeid,
+      storename,
+      storeaddress,
+    ])
+    res.json(result)
+  }
 })
 
 export default router
