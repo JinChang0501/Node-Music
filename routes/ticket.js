@@ -21,7 +21,7 @@ const getTicketByActivityId = async (req, res) => {
   const { actid } = req.params
   let success = false
   const sql = `
-    SELECT t.*, a.actname, a.actdate, a.acttime, a.location, a.picture, ar.art_name, m.name, m.email
+    SELECT t.*, a.actname, a.actdate, a.acttime, a.location, a.mingpic, ar.art_name, m.name, m.email
     FROM ticket t
     JOIN activity a ON t.activity_id = a.actid
     LEFT JOIN artist ar ON a.artist_id = ar.id
