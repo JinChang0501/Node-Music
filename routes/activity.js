@@ -88,12 +88,12 @@ const getListData = async (req) => {
 
   const sql = `
     SELECT 
-    e.actid, e.class, e.actname, e.actdate, e.acttime, e.location, e.area, e.picture, e.cover, e.descriptions, GROUP_CONCAT(a.art_name ORDER BY a.art_name SEPARATOR ', ') AS artists
+    e.actid, e.class, e.actname, e.actdate, e.acttime, e.location, e.area, e.picture, e.cover, e.picinfrontend, e.mingpic, e.descriptions, GROUP_CONCAT(a.art_name ORDER BY a.art_name SEPARATOR ', ') AS artists
     FROM \`activity\` AS e
     JOIN \`event_artists\` AS ea ON e.actid = ea.event_id
     JOIN \`artist\` AS a ON ea.artist_id = a.id 
     ${where} 
-    GROUP BY e.actid, e.class, e.actname, e.actdate, e.acttime, e.location, e.area, e.picture, e.cover, e.descriptions
+    GROUP BY e.actid, e.class, e.actname, e.actdate, e.acttime, e.location, e.area, e.picture, e.cover, e.picinfrontend, e.mingpic, e.descriptions
     ORDER BY e.actdate
     ASC`
   console.log(sql)
@@ -133,7 +133,7 @@ router.get('/:actid', async (req, res) => {
     return res.json({ success: false, error: '沒有編號' })
   }
   const t_sql = `
-  SELECT actid, class, actname, eaid, event_id, event_artists.artist_id, id, art_name, photo, spotify_id 
+  SELECT actid, class, actname, picinfrontend, mingpic, eaid, event_id, event_artists.artist_id, id, art_name, photo, photoname, spotify_id 
   FROM \`activity\` 
   JOIN \`event_artists\` ON activity.actid = event_artists.event_id 
   JOIN \`artist\` ON event_artists.artist_id = artist.id 
