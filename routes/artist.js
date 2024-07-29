@@ -70,7 +70,7 @@ router.get('/:artid', async (req, res) => {
     return res.json({ success: false, error: '沒有編號' })
   }
   const t_sql = `
-  SELECT e.actid, e.actname, e.actdate, e.picinfrontend, ea.eaid, ea.event_id, ea.artist_id, a.id, a.art_name, a.photo, a.photoname, a.spotify_id 
+  SELECT e.actid, e.actname, e.actdate, e.picinfrontend, ea.eaid, ea.event_id, ea.artist_id, a.id, a.art_name, a.photo, a.photoname, a.album, a.shortDes, a.spotify_id 
   FROM \`activity\` as e
   JOIN \`event_artists\` as ea ON e.actid = ea.event_id 
   JOIN \`artist\` as a ON ea.artist_id = a.id 
