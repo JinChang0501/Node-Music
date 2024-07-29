@@ -1,4 +1,5 @@
 import express from 'express'
+import moment from 'moment-timezone'
 const router = express.Router()
 
 // 中介軟體，存取隱私會員資料用
@@ -9,6 +10,8 @@ import { getIdParam } from '#db-helpers/db-tool.js'
 
 // 資料庫使用
 import db from '../utils/connect-mysql.js'
+
+const timeFormat = 'HH:mm'
 
 // GET - 得到所有Ticket資料
 // router.get('/', authenticate, async function (req, res) {
@@ -33,9 +36,21 @@ JOIN activity AS b ON a.activity_id = b.actid
 WHERE a.member_id = ${id}
 GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime, b.class,b.picinfrontend ,a.status,a.payment Order by a.created_at desc;`
 
+  const c_sql = `SELECT a.actname, a.actdate, a.acttime
+FROM ticket AS t
+JOIN activity AS a ON t.activity_id = a.actid
+WHERE t.member_id = ${id}
+GROUP BY a.actname;`
+
   const [result] = await db.query(sql)
+  const [calendar] = await db.query(c_sql)
+
+  calendar.forEach((el) => {
+    const t = moment(el.acttime, 'HH:mm:ss')
+    el.acttime = t.isValid() ? t.format(timeFormat) : ''
+  })
   // res.json({ result })
-  return res.json({ status: 'success', data: { result } })
+  return res.json({ status: 'success', data: { result, calendar } })
   // 處理如果沒找到資料
 })
 
