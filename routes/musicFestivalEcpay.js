@@ -415,7 +415,7 @@ router.post('/send-email', async (req, res) => {
             <tr>
               <td style="text-align: center; padding-bottom: 20px;">
                 <a href="http://localhost:3000/" style="display: inline-block;">
-                  <img src="https://i.postimg.cc/zX9tnq1L/makin-Logo-1.png" alt="MaK'in Logo" style="width: 150px; height: auto; border-radius: 8px;" />
+                  <img src="https://i.postimg.cc/zfywKMCt/makin-Logo-huge.png" alt="MaK'in Logo" style="width: 150px; height: auto;" />
                 </a>
               </td>
             </tr>
