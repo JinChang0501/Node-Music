@@ -40,7 +40,7 @@ GROUP BY a.order_num, a.created_at, b.actname, b.location, b.actdate, b.acttime,
 FROM ticket AS t
 JOIN activity AS a ON t.activity_id = a.actid
 WHERE t.member_id = ${id}
-GROUP BY a.actname;`
+GROUP BY a.actname, a.actdate, a.acttime;`
 
   const [result] = await db.query(sql)
   const [calendar] = await db.query(c_sql)
