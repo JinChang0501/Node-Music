@@ -31,7 +31,7 @@ router.get('/:order_num', authenticate, async function (req, res) {
     where += ` AND a.order_num = '${order_num}'`
   }
 
-  const sql = `SELECT a.order_num,a.status,b.actname, c.art_name,b.location,b.actdate,b.acttime,a.tid,b.picinfrontend,a.seat_area,a.seat_row,a.seat_number,a.price,a.created_at, d.name,a.payment FROM ticket as a 
+  const sql = `SELECT a.order_num,a.status,b.actname, c.art_name,b.location,b.actdate,b.acttime,a.tid,b.picinfrontend, b.mingpic,a.seat_area,a.seat_row,a.seat_number,a.price,a.created_at, d.name,a.payment FROM ticket as a 
 join activity as b on a.activity_id = b.actid 
 join artist as c on b.artist_id = c.id join member as d on a.member_id = d.id WHERE ${where};`
 

@@ -406,7 +406,7 @@ router.post('/send-email', async (req, res) => {
     const formattedPaymentTime = formatDateTime(orderRecord.created_at)
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"MAKIN 售票中心"<${process.env.EMAIL_USER}>`,
       to: email,
       subject: `MaK'in 製噪`,
       html: `
