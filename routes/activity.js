@@ -52,25 +52,37 @@ const getListData = async (req) => {
 
   // 日期 篩選
   let startDate, endDate
-  const today = moment()
-
-  if (dateRange) {
-    if (dateRange === 'two_weeks') {
-      startDate = today
-      endDate = today.clone().add(2, 'weeks')
-      where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
-    } else if (dateRange === 'this_month') {
-      startDate = today.startOf('month')
-      endDate = today.endOf('month')
-      where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
-    } else if (dateRange === 'next_month') {
-      startDate = today.clone().add(1, 'month').startOf('month')
-      endDate = today.clone().add(1, 'month').endOf('month')
-      where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
-    } else {
-      // 全部，就不篩
-    }
+  // const today = moment()
+  if (dateRange === 'two_weeks') {
+    startDate = moment()
+    endDate = moment().add(2, 'weeks')
+    where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+  } else if (dateRange === 'this_month') {
+    startDate = moment().startOf('month')
+    endDate = moment().endOf('month')
+    where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+  } else if (dateRange === 'next_month') {
+    startDate = moment().add(1, 'month').startOf('month')
+    endDate = moment().add(1, 'month').endOf('month')
+    where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
   }
+  // if (dateRange) {
+  //   if (dateRange === 'two_weeks') {
+  //     startDate = today
+  //     endDate = today.clone().add(2, 'weeks')
+  //     where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+  //   } else if (dateRange === 'this_month') {
+  //     startDate = today.startOf('month')
+  //     endDate = today.endOf('month')
+  //     where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+  //   } else if (dateRange === 'next_month') {
+  //     startDate = today.clone().add(1, 'month').startOf('month')
+  //     endDate = today.clone().add(1, 'month').endOf('month')
+  //     where += ` AND actdate >= '${startDate.format(dateFormat)}' AND actdate <= '${endDate.format(dateFormat)}' `
+  //   } else {
+  //     // 全部，就不篩
+  //   }
+  // }
 
   if (date_begin) {
     const m = moment(date_begin)
