@@ -35,7 +35,7 @@ router.get('/:filter', authenticate, async function (req, res) {
     where += ` AND c.class = '${filter}'`
   }
 
-  const sql = `select a.member_id as member_id, c.actid as activity_id,c.actname,c.descriptions,c.picture,c.cover,c.class as actClass 
+  const sql = `select a.member_id as member_id, c.actid as activity_id,c.actname,c.descriptions,c.picture,c.cover,c.picinfrontend,c.class as actClass 
 
   from favorite as a 
   join member as b on a.member_id = b.id 
@@ -55,7 +55,7 @@ router.get('/', authenticate, async function (req, res) {
   // let filter = req.params.filter || ''
   // let where = `a.member_id = ` + id
 
-  const sql = `select b.id as member_id, c.actid as activity_id,c.actname,c.descriptions,c.picture,c.cover,c.class as actClass from favorite as a join member as b on a.member_id = b.id join activity as c on a.item_id = c.actid WHERE a.member_id =${id}`
+  const sql = `select b.id as member_id, c.actid as activity_id,c.actname,c.descriptions,c.picture,c.cover,c.picinfrontend,c.class as actClass from favorite as a join member as b on a.member_id = b.id join activity as c on a.item_id = c.actid WHERE a.member_id =${id}`
 
   const [result] = await db.query(sql)
   // res.json({ result })
