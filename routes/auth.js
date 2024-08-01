@@ -27,7 +27,7 @@ router.get('/check', authenticate, async (req, res) => {
   })
 
   // 不回傳密碼值
-  delete user.password
+  // delete user.password
   return res.json({ status: 'success', data: { user } })
 })
 
